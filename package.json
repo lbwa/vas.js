@@ -4,6 +4,10 @@
   "description": "A component for building flowing chart",
   "main": "index.js",
   "repository": "git@github.com:lbw/flowing-liquid.git",
+  "bugs": {
+    "url": "https://github.com/lbwa/flowing-liquid/issues"
+  },
+  "homepage": "https://github.com/lbwa/flowing-liquid#readme",
   "author": "Bowen <devto@outlook.com>",
   "license": "MIT",
   "private": false,
@@ -17,6 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
+    "conventional-changelog-cli": "^2.0.11",
     "cross-env": "^5.2.0",
     "html-webpack-plugin": "^3.2.0",
     "rollup": "^0.66.6",
