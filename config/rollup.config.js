@@ -15,7 +15,7 @@ const banner =
 
 const build = {
   'development': {
-    entry: resolve('index.js'),
+    entry: resolve('src/index.js'),
     dest: resolve('dist/flowing-liquid.js'),
     format: 'umd',
     env: 'development',
@@ -24,7 +24,7 @@ const build = {
   },
 
   'production': {
-    entry: resolve('index.js'),
+    entry: resolve('src/index.js'),
     dest: resolve('dist/flowing-liquid.min.js'),
     format: 'umd',
     env: 'production',

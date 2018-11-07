@@ -1,14 +1,16 @@
-import FL from '../lib/FlowingLiquid'
-const flow = new FL({
+import FlowingLiquid from '../src'
+
+const flowingLiquid = new FlowingLiquid({
   el: '#chart',
-  canvasWidth: 500,
-  canvasHeight: 500,
-  startX: 0,
-  xOffset: 0,
-  waveWidth: 0.05,
-  waveHeight: 20
+  canvasWidth: 300,
+  canvasHeight: 300,
+  waterline: 60,
+  colors: [
+    '#F39C6B',
+    '#A0563B',
+    'rgba(243, 156, 107, 0.48)',
+    'rgba(160, 86, 59, 0.48)'
+  ]
 })
 
-flow.render({
-  speed: 0.05
-})
+flowingLiquid.render(5)
