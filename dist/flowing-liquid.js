@@ -1,5 +1,5 @@
 /*!
-  * flowing-liquid v0.2.1
+  * flowing-liquid v0.2.2
   * (c) 2018 Bowen<Github: lbwa>
   * @license MIT
   */
@@ -8,6 +8,40 @@
   typeof define === 'function' && define.amd ? define(factory) :
   (global.FlowingLiquid = factory());
 }(this, (function () { 'use strict';
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function _objectSpread(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
+
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+      }
+
+      ownKeys.forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    }
+
+    return target;
+  }
 
   class FlowingBody {
     constructor({
@@ -18,7 +52,7 @@
       xOffset = 0,
       speed = 0.04,
       colors = ['#DBB77A', '#BF8F3B']
-    } = {}) {
+    }) {
       this.points = [];
       this.startX = 0;
       this.canvasWidth = canvasWidth;
@@ -30,12 +64,13 @@
       this.colors = colors;
     }
 
-    getChartColor(ctx) {
+    createFillColor(ctx) {
+      if (typeof this.colors === 'string') return this.colors;
       const radius = this.canvasWidth / 2;
-      const grd = ctx.createLinearGradient(radius, radius, radius, this.canvasHeight);
-      grd.addColorStop(0, this.colors[0]);
-      grd.addColorStop(1, this.colors[1]);
-      return grd;
+      const gradient = ctx.createLinearGradient(radius, radius, radius, this.canvasHeight);
+      gradient.addColorStop(0, this.colors[0]);
+      gradient.addColorStop(1, this.colors[1]);
+      return gradient;
     }
 
     render(ctx) {
@@ -48,7 +83,7 @@
       ctx.lineTo(this.canvasWidth, this.canvasHeight);
       ctx.lineTo(this.startX, this.canvasHeight);
       ctx.lineTo(points[0].x, points[0].y);
-      ctx.fillStyle = this.getChartColor(ctx);
+      ctx.fillStyle = this.createFillColor(ctx);
       ctx.fill();
       ctx.restore();
     }
@@ -74,7 +109,7 @@
         });
       }
 
-      this.xOffset += this.speed;
+      this.xOffset = this.xOffset > 2 * Math.PI ? 0 : this.xOffset + this.speed;
     }
 
   }
@@ -85,7 +120,19 @@
       canvasWidth = 500,
       canvasHeight = 500,
       waterline = 60,
-      colors = ['#F39C6B', '#A0563B', 'rgba(243, 156, 107, 0.48)', 'rgba(160, 86, 59, 0.48)'],
+      flowingBody = [{
+        waveWidth: 0.055,
+        waveHeight: 4,
+        colors: ['#F39C6B', '#A0563B'],
+        xOffset: 0,
+        speed: 0.08
+      }, {
+        waveWidth: 0.04,
+        waveHeight: 7,
+        colors: ['rgba(243, 156, 107, 0.48)', 'rgba(160, 86, 59, 0.48)'],
+        xOffset: 2,
+        speed: 0.02
+      }],
       font = {
         bold: true,
         color: '',
@@ -103,25 +150,13 @@
       this.currentLine = 0; // control flowing wave target height
 
       this.waterline = waterline <= 100 ? waterline : 100;
-      this.colors = colors;
       this.font = font;
-      this.waves = [new FlowingBody({
-        canvasWidth: this.canvasWidth,
-        canvasHeight: this.canvasHeight,
-        waveWidth: 0.055,
-        waveHeight: 4,
-        colors: [this.colors[0], this.colors[1]],
-        xOffset: 0,
-        speed: 0.04
-      }), new FlowingBody({
-        canvasWidth: this.canvasWidth,
-        canvasHeight: this.canvasHeight,
-        waveWidth: 0.04,
-        waveHeight: 7,
-        colors: [this.colors[2], this.colors[3]],
-        xOffset: 2,
-        speed: 0.02
-      })];
+      this.waves = flowingBody.map(bodyOption => {
+        return new FlowingBody(_objectSpread({
+          canvasWidth: this.canvasWidth,
+          canvasHeight: this.canvasHeight
+        }, bodyOption));
+      });
     }
     /**
      * @param {Number} waveSpacing control multiple wave spacing

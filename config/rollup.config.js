@@ -52,7 +52,10 @@ function createConfig (opts) {
     plugins: [
       ...options.plugins,
       babel({
-        exclude: 'node_modules/**'
+        exclude: 'node_modules/**',
+        plugins: [
+          '@babel/plugin-proposal-object-rest-spread'
+        ]
       })
     ]
   }

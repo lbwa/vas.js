@@ -6,11 +6,21 @@ export default class FlowingLiquid {
     canvasWidth = 500,
     canvasHeight = 500,
     waterline = 60,
-    colors = [
-      '#F39C6B',
-      '#A0563B',
-      'rgba(243, 156, 107, 0.48)',
-      'rgba(160, 86, 59, 0.48)'
+    flowingBody = [
+      {
+        waveWidth: 0.055,
+        waveHeight: 4,
+        colors: ['#F39C6B', '#A0563B'],
+        xOffset: 0,
+        speed: 0.08
+      },
+      {
+        waveWidth: 0.04,
+        waveHeight: 7,
+        colors: ['rgba(243, 156, 107, 0.48)', 'rgba(160, 86, 59, 0.48)'],
+        xOffset: 2,
+        speed: 0.02
+      }
     ],
     font = {
       bold: true,
@@ -33,29 +43,15 @@ export default class FlowingLiquid {
 
     // control flowing wave target height
     this.waterline = waterline <= 100 ? waterline : 100
-    this.colors = colors
     this.font = font
 
-    this.waves = [
-      new FlowingBody({
+    this.waves = flowingBody.map(bodyOption => {
+      return new FlowingBody({
         canvasWidth: this.canvasWidth,
         canvasHeight: this.canvasHeight,
-        waveWidth: 0.055,
-        waveHeight: 4,
-        colors: [this.colors[0], this.colors[1]],
-        xOffset: 0,
-        speed: 0.04
-      }),
-      new FlowingBody({
-        canvasWidth: this.canvasWidth,
-        canvasHeight: this.canvasHeight,
-        waveWidth: 0.04,
-        waveHeight: 7,
-        colors: [this.colors[2], this.colors[3]],
-        xOffset: 2,
-        speed: 0.02
+        ...bodyOption
       })
-    ]
+    })
   }
 
   /**

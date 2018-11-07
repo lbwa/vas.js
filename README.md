@@ -22,12 +22,21 @@ const flowingLiquid = new FlowingLiquid({
   canvasWidth: 300, // canvas element width
   canvasHeight: 300, // canvas element height
   waterline: 60, // target waterline
-  // one of waves will filled by colors[2n], colors[2n+1]
-  colors: [
-    '#F39C6B',
-    '#A0563B',
-    'rgba(243, 156, 107, 0.48)',
-    'rgba(160, 86, 59, 0.48)'
+  flowingBody: [
+    {
+      waveWidth: 0.055, // wave width
+      waveHeight: 4, // wave height
+      colors: ['#F39C6B', '#A0563B'], // a css color Array or css color String
+      xOffset: 0, // start point offset, based on y-axis
+      speed: 0.08 // flowing speed
+    },
+    {
+      waveWidth: 0.04,
+      waveHeight: 7,
+      colors: ['rgba(243, 156, 107, 0.48)', 'rgba(160, 86, 59, 0.48)'],
+      xOffset: 2,
+      speed: 0.02
+    }
   ],
   // indicator text, default value is parameter waterline
   font: {

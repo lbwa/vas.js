@@ -7,7 +7,7 @@ export default class FlowingBody {
     xOffset = 0,
     speed = 0.04,
     colors = ['#DBB77A', '#BF8F3B'],
-  } = {}) {
+  }) {
     this.points = []
     this.startX = 0
     this.canvasWidth = canvasWidth
@@ -18,12 +18,14 @@ export default class FlowingBody {
     this.speed = speed
     this.colors = colors
   }
-  getChartColor(ctx) {
+  createFillColor(ctx) {
+    if (typeof this.colors === 'string') return this.colors
+
     const radius = this.canvasWidth / 2
-    const grd = ctx.createLinearGradient(radius, radius, radius, this.canvasHeight)
-    grd.addColorStop(0, this.colors[0])
-    grd.addColorStop(1, this.colors[1])
-    return grd
+    const gradient = ctx.createLinearGradient(radius, radius, radius, this.canvasHeight)
+    gradient.addColorStop(0, this.colors[0])
+    gradient.addColorStop(1, this.colors[1])
+    return gradient
   }
   render (ctx) {
     const points = this.points
@@ -35,7 +37,7 @@ export default class FlowingBody {
     ctx.lineTo(this.canvasWidth, this.canvasHeight)
     ctx.lineTo(this.startX, this.canvasHeight)
     ctx.lineTo(points[0].x, points[0].y)
-    ctx.fillStyle = this.getChartColor(ctx)
+    ctx.fillStyle = this.createFillColor(ctx)
     ctx.fill()
     ctx.restore()
   }
@@ -58,6 +60,6 @@ export default class FlowingBody {
         y: canvasHeight * (1 - (currentLine / 100)) + (y * waveHeight)
       })
     }
-    this.xOffset += this.speed
+    this.xOffset = this.xOffset > 2 * Math.PI ? 0 : this.xOffset + this.speed
   }
 }
