@@ -1,5 +1,5 @@
 /*!
-  * flowing-liquid v0.2.2
+  * flowing-liquid v0.3.0
   * (c) 2018 Bowen<Github: lbwa>
   * @license MIT
   */

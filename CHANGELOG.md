@@ -1,3 +1,7 @@
+# [0.3.0](https://github.com/lbw/flowing-liquid/compare/v0.2.2...v0.3.0) (2018-11-07)
+
+
+
 ## [0.2.2](https://github.com/lbw/flowing-liquid/compare/v0.2.1...v0.2.2) (2018-11-07)
 
 
