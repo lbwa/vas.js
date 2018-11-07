@@ -2,12 +2,15 @@
   "name": "flowing-liquid",
   "version": "0.2.1",
   "description": "A component for building flowing chart",
-  "main": "index.js",
+  "main": "dist/flowing-liquid.min.js",
   "repository": "git@github.com:lbw/flowing-liquid.git",
   "bugs": {
     "url": "https://github.com/lbwa/flowing-liquid/issues"
   },
   "homepage": "https://github.com/lbwa/flowing-liquid#readme",
+  "files": [
+    "dist"
+  ],
   "author": "Bowen <devto@outlook.com>",
   "license": "MIT",
   "private": false,
