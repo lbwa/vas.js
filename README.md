@@ -1,6 +1,14 @@
-# flowing-liquid ![npm](https://img.shields.io/npm/v/flowing-liquid.svg?style=flat-square)
+# flowing-liquid [![npm](https://img.shields.io/npm/v/flowing-liquid.svg?style=flat-square)](https://www.npmjs.com/package/flowing-liquid)
 
 > A component for building flowing chart.
+
+<p align="center">
+  <a href="https://lbwa.github.io/flowing-liquid/">Online demo</a>
+</p>
+
+<p align="center">
+  <img src="./sample.gif"/>
+</p>
 
 ## Installing
 
@@ -14,11 +22,13 @@ npm i flowing-liquid --save
 
 ## Usage
 
+**Notice**: Only `el` option is **required**.
+
 ```js
 import FlowingLiquid from 'flowing-liquid'
 
 const flowingLiquid = new FlowingLiquid({
-  el: '#chart', // canvas element
+  el: '#chart', // canvas element, required
   canvasWidth: 300, // canvas element width
   canvasHeight: 300, // canvas element height
   waterline: 60, // target waterline
