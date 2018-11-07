@@ -1,6 +1,6 @@
 {
   "name": "flowing-liquid",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A component for building flowing chart",
   "main": "index.js",
   "repository": "git@github.com:lbw/flowing-liquid.git",
