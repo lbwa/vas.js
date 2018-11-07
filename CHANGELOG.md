@@ -1,4 +1,13 @@
-# 0.2.0 (2018-11-07)
+## [0.2.2](https://github.com/lbw/flowing-liquid/compare/v0.2.1...v0.2.2) (2018-11-07)
+
+
+### Bug Fixes
+
+* correct import entry ([ef67e0a](https://github.com/lbw/flowing-liquid/commit/ef67e0a))
+
+
+
+## [0.2.1](https://github.com/lbw/flowing-liquid/compare/b21f63d...v0.2.1) (2018-11-07)
 
 
 ### Features
