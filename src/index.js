@@ -11,7 +11,14 @@ export default class FlowingLiquid {
       '#A0563B',
       'rgba(243, 156, 107, 0.48)',
       'rgba(160, 86, 59, 0.48)'
-    ]
+    ],
+    font = {
+      bold: true,
+      color: '',
+      size: 50,
+      family: 'Microsoft Yahei',
+      text: ''
+    }
   }) {
     if (typeof el !== 'string') throw new Error(
       'Parameter el should be a String !'
@@ -25,8 +32,9 @@ export default class FlowingLiquid {
     this.currentLine = 0
 
     // control flowing wave target height
-    this.waterline = waterline
+    this.waterline = waterline <= 100 ? waterline : 100
     this.colors = colors
+    this.font = font
 
     this.waves = [
       new FlowingBody({
@@ -53,7 +61,7 @@ export default class FlowingLiquid {
   /**
    * @param {Number} waveSpacing control multiple wave spacing
    */
-  render (waveSpacing = 5) {
+  render (waveSpacing = 5, showText = false) {
     const ctx = this.canvas.getContext('2d')
     ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
     if (!this.hasRenderedContainer) this.drawContainer(ctx)
@@ -64,9 +72,26 @@ export default class FlowingLiquid {
         currentLine: this.currentLine + index * waveSpacing
       })
       wave.render(ctx)
+      if (showText) this.renderText(ctx, `${this.currentLine}`)
     })
 
-    window.requestAnimationFrame(this.render.bind(this, waveSpacing))
+    window.requestAnimationFrame(this.render.bind(this, waveSpacing, showText))
+  }
+
+  renderText (ctx, text) {
+    const font  = this.font
+    const fontStyle = `${font.bold ? 'bold' : ''} `
+     + `${font.size || 50}px `
+     + `${font.family || 'Microsoft Yahei'}`
+
+    ctx.font = fontStyle
+    ctx.fillStyle = font.color || 'rgba(160, 86, 60, 1)'
+    ctx.textAlign = 'center'
+    ctx.fillText(
+      font.text ? font.text : text,
+      this.canvasWidth / 2,
+      this.canvasHeight / 2 + this.font.size / 2
+    )
   }
 
   drawContainer (ctx) {
