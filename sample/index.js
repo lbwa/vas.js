@@ -7,27 +7,27 @@ const flowingLiquid = new FlowingLiquid({
   waterline: 60,
   flowingBody: [
     {
-      waveWidth: 0.055,
-      waveHeight: 4,
-      colors: ['#F39C6B', '#A0563B'],
+      waveWidth: 0.025,
+      waveHeight: 8,
+      colors: ['rgba(156, 220, 253, .6)', 'rgba(156, 220, 253, .6)'],
       xOffset: 0,
-      speed: 0.08
+      speed: 0.04
     },
     {
-      waveWidth: 0.04,
+      waveWidth: 0.035,
       waveHeight: 7,
-      colors: ['rgba(243, 156, 107, 0.48)', 'rgba(160, 86, 59, 0.48)'],
+      colors: ['rgba(119, 210, 253, .4)', 'rgba(119, 210, 253, .4)'],
       xOffset: 2,
       speed: 0.02
     }
   ],
+  background: {
+    color: 'dodgerblue',
+    style: 'fill'
+  },
   font: {
-    bold: true,
-    color: '',
-    size: 50,
-    family: 'Microsoft Yahei',
-    text: ''
+    color: 'white'
   }
 })
 
-flowingLiquid.render(5, true)
+flowingLiquid.render(1, true)

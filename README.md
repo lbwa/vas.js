@@ -48,6 +48,11 @@ const flowingLiquid = new FlowingLiquid({
       speed: 0.02
     }
   ],
+  // set canvas background color
+  background: {
+    color: 'dodgerblue',
+    style: 'fill'
+  },,
   // indicator text, default value is parameter waterline
   font: {
     bold: true,

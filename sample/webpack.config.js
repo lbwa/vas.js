@@ -43,7 +43,7 @@ const config = {
 if (devMode) {
   config.devtool = 'cheap-module-eval-source-map',
   config.devServer = {
-    host: '127.0.0.1',
+    host: '0.0.0.0',
       port: 5000,
         overlay: {
       warnings: false,

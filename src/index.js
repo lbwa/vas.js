@@ -57,6 +57,10 @@ export default class FlowingLiquid {
         ...bodyOption
       })
     })
+
+    // replace `context.clip()`
+    // `context.clip()` will occur frame dropping on the mobile device (eg. IOS)
+    this.canvas.style.borderRadius = '50%'
   }
 
   /**
@@ -87,12 +91,12 @@ export default class FlowingLiquid {
      + `${font.family || 'Microsoft Yahei'}`
 
     ctx.font = fontStyle
-    ctx.fillStyle = font.color || 'rgba(160, 86, 60, 1)'
+    ctx.fillStyle = font.color || '#24292e'
     ctx.textAlign = 'center'
     ctx.fillText(
       font.text ? font.text : text,
       this.canvasWidth / 2,
-      this.canvasHeight / 2 + this.font.size / 2
+      this.canvasHeight / 2 + (this.font.size || 50) / 2
     )
   }
 
@@ -106,7 +110,7 @@ export default class FlowingLiquid {
     
     this.createContainerBackground(ctx, background)
 
-    // ctx.clip() // Drop frame risky in the mobile device (eg.IOS)
+    // ctx.clip() // Drop frame risk on the mobile device (eg.IOS)
   
     // `stroke` style will render only once
     if (background.style === 'stroke') this.hasRenderedContainer = true
