@@ -1,3 +1,17 @@
+# [0.4.0](https://github.com/lbw/flowing-liquid/compare/v0.3.0...v0.4.0) (2018-11-08)
+
+
+### Bug Fixes
+
+* **src/index:** avoid frame droping on the mobile device ([d291091](https://github.com/lbw/flowing-liquid/commit/d291091))
+
+
+### Features
+
+* **src/index:** support background color ([09af395](https://github.com/lbw/flowing-liquid/commit/09af395))
+
+
+
 # [0.3.0](https://github.com/lbw/flowing-liquid/compare/v0.2.2...v0.3.0) (2018-11-07)
 
 

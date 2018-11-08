@@ -1,5 +1,5 @@
 /*!
-  * flowing-liquid v0.3.0
+  * flowing-liquid v0.4.0
   * (c) 2018 Bowen<Github: lbwa>
   * @license MIT
   */
@@ -139,6 +139,10 @@
         size: 50,
         family: 'Microsoft Yahei',
         text: ''
+      },
+      background = {
+        color: 'rgba(186, 165, 130, 0.3)',
+        style: 'stroke'
       }
     }) {
       if (typeof el !== 'string') throw new Error('Parameter el should be a String !');
@@ -151,12 +155,16 @@
 
       this.waterline = waterline <= 100 ? waterline : 100;
       this.font = font;
+      this.background = background;
       this.waves = flowingBody.map(bodyOption => {
         return new FlowingBody(_objectSpread({
           canvasWidth: this.canvasWidth,
           canvasHeight: this.canvasHeight
         }, bodyOption));
-      });
+      }); // replace `context.clip()`
+      // `context.clip()` will occur frame dropping on the mobile device (eg. IOS)
+
+      this.canvas.style.borderRadius = '50%';
     }
     /**
      * @param {Number} waveSpacing control multiple wave spacing
@@ -166,7 +174,7 @@
     render(waveSpacing = 5, showText = false) {
       const ctx = this.canvas.getContext('2d');
       ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-      if (!this.hasRenderedContainer) this.drawContainer(ctx);
+      if (!this.hasRenderedContainer) this.renderContainer(ctx, this.background);
       if (this.currentLine < this.waterline) this.currentLine += 1;
       this.waves.forEach((wave, index) => {
         wave.createPointsMap({
@@ -175,29 +183,46 @@
         wave.render(ctx);
         if (showText) this.renderText(ctx, `${this.currentLine}`);
       });
-      window.requestAnimationFrame(this.render.bind(this, waveSpacing, showText));
+      window.requestAnimationFrame(this.render.bind(this, waveSpacing, showText, this.background));
     }
 
     renderText(ctx, text) {
       const font = this.font;
       const fontStyle = `${font.bold ? 'bold' : ''} ` + `${font.size || 50}px ` + `${font.family || 'Microsoft Yahei'}`;
       ctx.font = fontStyle;
-      ctx.fillStyle = font.color || 'rgba(160, 86, 60, 1)';
+      ctx.fillStyle = font.color || '#24292e';
       ctx.textAlign = 'center';
-      ctx.fillText(font.text ? font.text : text, this.canvasWidth / 2, this.canvasHeight / 2 + this.font.size / 2);
+      ctx.fillText(font.text ? font.text : text, this.canvasWidth / 2, this.canvasHeight / 2 + (this.font.size || 50) / 2);
     }
 
-    drawContainer(ctx) {
+    renderContainer(ctx, background) {
       const radius = this.canvasWidth / 2;
-      const lineWidth = 4;
+      const lineWidth = background.style === 'fill' ? 0 : 4;
       const innerRadius = radius - lineWidth;
       ctx.lineWidth = lineWidth;
       ctx.beginPath();
-      ctx.arc(radius, radius, innerRadius, 0, 2 * Math.PI);
-      ctx.strokeStyle = 'rgba(186, 165, 130, 0.3)';
-      ctx.stroke();
-      ctx.clip();
-      this.hasRenderedContainer = true;
+      ctx.arc(radius + 0.5, radius + 0.5, innerRadius, 0, 2 * Math.PI);
+      this.createContainerBackground(ctx, background); // ctx.clip() // Drop frame risk on the mobile device (eg.IOS)
+      // `stroke` style will render only once
+
+      if (background.style === 'stroke') this.hasRenderedContainer = true;
+    }
+
+    createContainerBackground(ctx, {
+      color,
+      style
+    }) {
+      if (style === 'stroke') {
+        ctx.strokeStyle = color || 'rgba(186, 165, 130, 0.3)';
+        ctx.stroke();
+        return;
+      }
+
+      if (style === 'fill') {
+        ctx.fillStyle = color || 'rgba(186, 165, 130, 0.3)';
+        ctx.fill();
+        return;
+      }
     }
 
   }
