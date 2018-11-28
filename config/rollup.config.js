@@ -53,8 +53,8 @@ function createConfig (opts) {
       ...options.plugins,
       babel({
         exclude: 'node_modules/**',
-        plugins: [
-          '@babel/plugin-proposal-object-rest-spread'
+        presets: [
+          '@babel/preset-env'
         ]
       })
     ]
