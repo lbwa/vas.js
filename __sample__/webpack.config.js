@@ -57,6 +57,7 @@ if (__DEV__) {
     host: '0.0.0.0',
     port: 8080,
     clientLogLevel: 'warning',
+    // web 页的错误遮罩
     overlay: {
       warnings: true,
       errors: true
