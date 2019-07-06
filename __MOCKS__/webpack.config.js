@@ -10,7 +10,7 @@ const config = {
   mode: __DEV__ ? 'development' : 'production',
   context: fromRoot('./'),
   entry: {
-    sample: fromRoot('__sample__/index.ts')
+    sample: fromRoot('__MOCKS__/index.ts')
   },
   output: {
     path: fromRoot('./docs'),
@@ -34,7 +34,7 @@ const config = {
   plugins: [
     new HTMLWebpackPlugin({
       filename: 'index.html',
-      template: fromRoot('__sample__/index.html')
+      template: fromRoot('__MOCKS__/index.html')
     }),
     new WebpackBar({
       name: 'Vas.js Dev server',

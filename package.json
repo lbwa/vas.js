@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rm -vrf dist/*",
     "build": "webpack --mode=production --config config/webpack.prod.js",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config __sample__/webpack.config.js"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config __MOCKS__/webpack.config.js"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
