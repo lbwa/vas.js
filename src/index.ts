@@ -53,40 +53,37 @@ class Vas {
   render() {
     this.renderFlow()
     this.ctx.globalCompositeOperation = 'destination-atop'
-    this.renderInner()
+    this.renderCircle({
+      radius: this.width / 2 - 0.06 * this.width,
+      color: 'rgba(1, 174, 255, 0.8)'
+    })
     this.ctx.globalCompositeOperation = 'destination-over'
-    this.renderOuter()
+    this.renderCircle({ color: 'rgba(1, 174, 255, 0.2)' })
+    this.ctx.globalCompositeOperation = 'source-over' // default value
     _worker(this.render.bind(this))
   }
 
-  renderOuter() {
+  renderCircle({
+    x = this.width / 2,
+    y = this.height / 2,
+    radius = this.width / 2,
+    startAngle = 0,
+    endAngle = 2 * Math.PI,
+    anticlockwise,
+    color
+  }: {
+    x?: number
+    y?: number
+    radius?: number
+    startAngle?: number
+    endAngle?: number
+    anticlockwise?: boolean | undefined
+    color: string
+  }) {
     const { ctx } = this
     ctx.beginPath()
-    ctx.arc(
-      this.width / 2,
-      this.height / 2,
-      this.width / 2,
-      0,
-      2 * Math.PI,
-      false
-    )
-    ctx.fillStyle = 'rgba(1, 174, 255, 0.2)'
-    ctx.fill()
-    ctx.closePath()
-  }
-
-  renderInner() {
-    const { ctx } = this
-    ctx.beginPath()
-    ctx.arc(
-      this.width / 2,
-      this.height / 2,
-      this.width / 2 - 0.06 * this.width,
-      0,
-      2 * Math.PI,
-      false
-    )
-    ctx.fillStyle = 'rgba(1, 174, 255, 0.8)'
+    ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise)
+    ctx.fillStyle = color
     ctx.fill()
     ctx.closePath()
   }
@@ -102,7 +99,7 @@ class Vas {
       0.9 * Math.PI,
       false
     )
-    ctx.fillStyle = 'red'
+    ctx.fillStyle = 'white'
     ctx.fill()
     ctx.closePath()
   }
