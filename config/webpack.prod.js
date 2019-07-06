@@ -12,7 +12,7 @@ module.exports = {
   output: {
     path: fromRoot('dist'),
     filename: 'vas.js',
-    library: 'vasjs',
+    library: 'Vas',
     libraryTarget: 'umd'
   },
 
