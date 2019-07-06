@@ -59,8 +59,8 @@ class Vas {
     })
     this.ctx.globalCompositeOperation = 'destination-over'
     this.renderCircle({ color: 'rgba(1, 174, 255, 0.2)' })
-    this.ctx.globalCompositeOperation = 'source-over' // default value
-    _worker(this.render.bind(this))
+    // this.ctx.globalCompositeOperation = 'source-over' // default value
+    // _worker(this.render.bind(this))
   }
 
   renderCircle({
@@ -89,17 +89,54 @@ class Vas {
   }
 
   renderFlow() {
-    const { ctx } = this
+    const { ctx, width: waveTotalLength, height } = this
+
+    const centerY = height / 2
+    const startX = 0
+    const startY = centerY + 90
+
+    /**
+     * @description Similar to wave spatial frequency, but this describe how
+     *  many period exist in entries life-cycle, not unit of space
+     * @wiki https://en.wikipedia.org/wiki/Spatial_frequency
+     */
+    const waveTotalPeriods = 5
+    //
+    /**
+     * @description The distance over which the wave's shape repeats
+     * @wiki https://en.wikipedia.org/wiki/Wavelength
+     */
+    const waveLength = waveTotalLength / waveTotalPeriods
+    const waveHeight = 10
+
+    const progress = 0
+    const offset = 0
+    const offsetY = startY - (90 * 2 * progress) / 100
+    const waveColor = 'white'
+
+    ctx.fillStyle = waveColor
     ctx.beginPath()
-    ctx.arc(
-      this.width / 2,
-      this.height / 2,
-      this.width / 2,
-      0,
-      0.9 * Math.PI,
-      false
-    )
-    ctx.fillStyle = 'white'
+    ctx.moveTo(startX - offset, offsetY)
+
+    for (let i = 0; i < waveTotalPeriods; i++) {
+      const dx = waveLength * i
+      const offsetX = dx + startX - offset
+      ctx.quadraticCurveTo(
+        offsetX + waveLength / 4,
+        offsetY + waveHeight,
+        offsetX + waveLength / 2,
+        offsetY
+      )
+      ctx.quadraticCurveTo(
+        offsetX + waveLength / 4 + waveLength / 2,
+        offsetY - waveHeight,
+        offsetX + waveLength,
+        offsetY
+      )
+    }
+
+    ctx.lineTo(startX + waveTotalLength, height)
+    ctx.lineTo(startX, height)
     ctx.fill()
     ctx.closePath()
   }
