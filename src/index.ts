@@ -1,5 +1,19 @@
 import { assert } from '@/_utils'
 
+interface VasConstructor {
+  el: string | Element
+  height: string | number
+  width: string | number
+  speed: number
+}
+
+interface Wave {
+  waveHeight: number
+  color: string
+  progress?: number
+  offset?: number
+}
+
 const _worker = (function() {
   return (
     window.requestAnimationFrame.bind(window) ||
@@ -13,20 +27,15 @@ const _worker = (function() {
   )
 })()
 
-interface VasConstructor {
-  el: string | Element
-  height: string | number
-  width: string | number
-}
-
 class Vas {
   el: HTMLCanvasElement
   height: number
   width: number
   ctx: CanvasRenderingContext2D
+  speed: number
   private stepOffset: number
 
-  constructor({ el, height, width }: VasConstructor) {
+  constructor({ el, height, width, speed = -0.5 }: VasConstructor) {
     const element = el instanceof Element ? el : document.querySelector(el)
     assert(element, `${el} is not a HTML element.`)
 
@@ -36,7 +45,9 @@ class Vas {
     this.width = this.el.width =
       typeof width === 'number' ? width : parseInt(width)
     this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
+
     this.stepOffset = 0
+    this.speed = speed
 
     assert(
       this.ctx,
@@ -48,12 +59,17 @@ class Vas {
   }
 
   clear() {
-    const ctx = this.ctx
-    ctx.clearRect(0, 0, this.width, this.height)
+    this.ctx.clearRect(0, 0, this.width, this.height)
   }
 
-  render() {
-    this.renderFlow()
+  render = () => {
+    this.renderFluid({
+      waveHeight: 30,
+      color: 'pink',
+      progress: 20,
+      offset: 21
+    })
+    this.renderFluid({ waveHeight: 30, color: 'white' })
     this.ctx.globalCompositeOperation = 'destination-atop'
     this.renderCircle({
       radius: this.width / 2 - 0.06 * this.width,
@@ -62,7 +78,8 @@ class Vas {
     this.ctx.globalCompositeOperation = 'destination-over'
     this.renderCircle({ color: 'rgba(1, 174, 255, 0.2)' })
     this.ctx.globalCompositeOperation = 'source-over' // default value
-    _worker(this.render.bind(this))
+    this.ctx.save()
+    _worker(this.render)
   }
 
   renderCircle({
@@ -90,7 +107,12 @@ class Vas {
     ctx.closePath()
   }
 
-  renderFlow() {
+  renderFluid({
+    waveHeight,
+    color = 'rgba(1, 174, 255, 0.8)',
+    progress = 0,
+    offset = 0
+  }: Wave) {
     const { ctx, width, height } = this
 
     /**
@@ -105,17 +127,15 @@ class Vas {
      */
     const waveTotalLength = width * 2
     const waveLength = waveTotalLength / waveTotalPeriods
-    const waveHeight = 10
 
     const centerY = height / 2
-    const startX = -waveLength * 2.5
+    const startX = -waveLength * 2.5 + offset
     const startY = centerY
 
-    const progress = 0
-    const offsetY = startY - progress / 100 // current wave stage
-    const waveColor = 'white'
+    const offsetY = startY - (progress /100 * this.height) // current wave stage
+    const waveColor = color
 
-    this.stepper(-0.5, waveLength)
+    this.stepper(this.speed, waveLength * 2)
 
     ctx.fillStyle = waveColor
     ctx.beginPath()
@@ -144,7 +164,7 @@ class Vas {
     ctx.closePath()
   }
 
-  stepper(flowingSpeed = -1, limit = this.width) {
+  stepper(flowingSpeed: number, limit = this.width) {
     this.stepOffset += flowingSpeed
     if (
       (this.stepOffset > 0 && this.stepOffset >= limit) ||
