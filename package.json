@@ -1,7 +1,7 @@
 {
-  "name": "vasjs",
+  "name": "vas.js",
   "version": "0.0.1",
-  "description": "A component for building flowing chart",
+  "description": "A JavaScript library for building wave-like chart.",
   "main": "index.js",
   "repository": "git@github.com:lbwa/vasjs.git",
   "author": "Bowen <asyncmode@gmail.com>",
