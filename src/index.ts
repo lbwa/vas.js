@@ -10,14 +10,20 @@ interface VasConstructor {
   height: string | number
   width: string | number
   speed: number
-  waves: Wave | Wave[]
+  waves: WaveOption | WaveOption[]
 }
 
-interface Wave {
+interface WaveOption {
   waveHeight: number
   color: string
   progress?: number
   offset?: number
+  speed?: number
+  step?: number
+}
+
+interface Wave extends WaveOption {
+  step: number
 }
 
 const _worker = (function() {
@@ -40,7 +46,6 @@ class Vas {
   ctx: CanvasRenderingContext2D
   speed: number
   waves: Wave[]
-  private stepOffset: number
 
   constructor({ el, height, width, speed = -0.5, waves }: VasConstructor) {
     const element = el instanceof Element ? el : document.querySelector(el)
@@ -53,10 +58,11 @@ class Vas {
       typeof width === 'number' ? width : parseInt(width)
     this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
 
-    this.stepOffset = 0
     this.speed = speed
 
-    this.waves = Array.isArray(waves) ? waves : [waves]
+    this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
+      Object.assign(wave, { step: 0 })
+    )
 
     assert(
       this.ctx,
@@ -112,12 +118,13 @@ class Vas {
     ctx.closePath()
   }
 
-  renderWaves({
-    waveHeight,
-    color = DEFAULT_COLOR.bg,
-    progress = 0,
-    offset = 0
-  }: Wave) {
+  renderWaves(wave: Wave) {
+    const {
+      waveHeight,
+      color = DEFAULT_COLOR.bg,
+      progress = 0,
+      offset = 0
+    } = wave
     const { ctx, width, height } = this
 
     /**
@@ -140,15 +147,15 @@ class Vas {
     const offsetY = startY - (progress / 100) * this.height // current wave stage
     const waveColor = color
 
-    this.stepper(this.speed, waveLength * 2)
+    this.stepper(wave, waveLength * 2)
 
     ctx.fillStyle = waveColor
     ctx.beginPath()
-    ctx.moveTo(startX - this.stepOffset, offsetY)
+    ctx.moveTo(startX - wave.step, offsetY)
 
     for (let i = 0; i < waveTotalPeriods; i++) {
       const dx = waveLength * i
-      const offsetX = dx + startX - this.stepOffset
+      const offsetX = dx + startX - wave.step
       ctx.quadraticCurveTo(
         offsetX + waveLength / 4,
         offsetY + waveHeight,
@@ -169,13 +176,15 @@ class Vas {
     ctx.closePath()
   }
 
-  stepper(flowingSpeed: number, limit = this.width) {
-    this.stepOffset += flowingSpeed
+  stepper(wave: Wave, limit = this.width) {
+    wave.step += wave.speed || this.speed || -0.1
     if (
-      (this.stepOffset > 0 && this.stepOffset >= limit) ||
-      (this.stepOffset < 0 && this.stepOffset <= -limit)
+      (wave.step > 0 && wave.step >= limit) ||
+      (wave.step < 0 && wave.step <= -limit)
     )
-      this.stepOffset = 0
+      wave.step = 0
+
+    // console.log('wave :', wave)
   }
 }
 
