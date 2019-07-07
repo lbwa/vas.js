@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "clean": "rm -vrf dist/*",
-    "build": "webpack --mode=production --config config/webpack.prod.js",
+    "build": "webpack --mode=production --config config/webpack.prod.js --progress",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config __MOCKS__/webpack.config.js"
   },
   "devDependencies": {
