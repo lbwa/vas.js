@@ -1,10 +1,16 @@
 import { assert } from '@/_utils'
 
+enum DEFAULT_COLOR {
+  bg = 'white',
+  gap = '#ccefff'
+}
+
 interface VasConstructor {
   el: string | Element
   height: string | number
   width: string | number
   speed: number
+  waves: Wave | Wave[]
 }
 
 interface Wave {
@@ -33,9 +39,10 @@ class Vas {
   width: number
   ctx: CanvasRenderingContext2D
   speed: number
+  waves: Wave[]
   private stepOffset: number
 
-  constructor({ el, height, width, speed = -0.5 }: VasConstructor) {
+  constructor({ el, height, width, speed = -0.5, waves }: VasConstructor) {
     const element = el instanceof Element ? el : document.querySelector(el)
     assert(element, `${el} is not a HTML element.`)
 
@@ -49,12 +56,13 @@ class Vas {
     this.stepOffset = 0
     this.speed = speed
 
+    this.waves = Array.isArray(waves) ? waves : [waves]
+
     assert(
       this.ctx,
       'Unable to initialize Canvas. Your browser or machine may not support it.'
     )
 
-    this.clear()
     this.render()
   }
 
@@ -63,22 +71,19 @@ class Vas {
   }
 
   render = () => {
-    this.renderFluid({
-      waveHeight: 30,
-      color: 'pink',
-      progress: 20,
-      offset: 21
-    })
-    this.renderFluid({ waveHeight: 30, color: 'white' })
+    this.clear()
+    this.ctx.save()
+    for (const wave of this.waves) {
+      this.renderWaves(wave)
+    }
     this.ctx.globalCompositeOperation = 'destination-atop'
     this.renderCircle({
       radius: this.width / 2 - 0.06 * this.width,
-      color: 'rgba(1, 174, 255, 0.8)'
+      color: 'white'
     })
     this.ctx.globalCompositeOperation = 'destination-over'
-    this.renderCircle({ color: 'rgba(1, 174, 255, 0.2)' })
-    this.ctx.globalCompositeOperation = 'source-over' // default value
-    this.ctx.save()
+    this.renderCircle({ color: DEFAULT_COLOR.gap })
+    this.ctx.restore()
     _worker(this.render)
   }
 
@@ -107,9 +112,9 @@ class Vas {
     ctx.closePath()
   }
 
-  renderFluid({
+  renderWaves({
     waveHeight,
-    color = 'rgba(1, 174, 255, 0.8)',
+    color = DEFAULT_COLOR.bg,
     progress = 0,
     offset = 0
   }: Wave) {
@@ -132,7 +137,7 @@ class Vas {
     const startX = -waveLength * 2.5 + offset
     const startY = centerY
 
-    const offsetY = startY - (progress /100 * this.height) // current wave stage
+    const offsetY = startY - (progress / 100) * this.height // current wave stage
     const waveColor = color
 
     this.stepper(this.speed, waveLength * 2)
