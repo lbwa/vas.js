@@ -1,12 +1,20 @@
 {
   "name": "vas.js",
-  "version": "0.0.1",
+  "version": "0.4.1",
   "description": "A JavaScript library for building wave-like chart.",
-  "main": "index.js",
-  "repository": "git@github.com:lbwa/vasjs.git",
+  "main": "dist/vas.js",
+  "repository": "git@github.com:lbwa/vas.js.git",
   "author": "Bowen <asyncmode@gmail.com>",
   "license": "MIT",
   "private": true,
+  "homepage": "https://github.com/lbwa/vas.js#readme",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "bugs": {
+    "url": "https://github.com/lbwa/vas.js/issues"
+  },
   "scripts": {
     "clean": "rm -vrf dist/*",
     "build": "webpack --mode=production --config config/webpack.prod.js --progress",
@@ -21,5 +29,18 @@
     "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.7.2",
     "webpackbar": "^3.2.0"
-  }
+  },
+  "keywords": [
+    "canvas",
+    "wave",
+    "animation",
+    "requestAnimationFrame",
+    "wave-like",
+    "flow",
+    "chart",
+    "typescript",
+    "util",
+    "component",
+    "fluid"
+  ]
 }
