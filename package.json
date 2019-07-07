@@ -1,12 +1,12 @@
 {
-  "name": "vas.js",
+  "name": "vasjs",
   "version": "0.4.1",
   "description": "A JavaScript library for building wave-like chart.",
   "main": "dist/vas.js",
   "repository": "git@github.com:lbwa/vas.js.git",
   "author": "Bowen <asyncmode@gmail.com>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "homepage": "https://github.com/lbwa/vas.js#readme",
   "files": [
     "dist",
