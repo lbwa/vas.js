@@ -8,6 +8,27 @@
   <a href="https://lbwa.github.io/vas.js">Preview</a>
 </p>
 
+<p align="center">
+  <a href="https://lbwa.github.io/vas.js">
+    <img src="https://img.shields.io/bundlephobia/minzip/vasjs.svg?style=flat-square" alt="npm bundle size"/>
+  </a>
+  <a href="https://www.npmjs.com/package/vasjs">
+    <img src="https://img.shields.io/npm/dt/vasjs.svg?style=flat-square" alt="npm"/>
+  </a>
+  <a href="https://www.npmjs.com/package/vasjs">
+    <img src="https://img.shields.io/npm/v/vasjs.svg?style=flat-square" alt="npm version"/>
+  </a>
+  <a href="https://github.com/lbwa/vas.js/releases">
+    <img src="https://img.shields.io/github/release/lbwa/vas.js.svg?style=flat-square" alt="github release"/>
+  </a>
+  <a href="https://lbwa.github.io/vas.js">
+    <img src="https://img.shields.io/website/https/lbwa.github.io/vas.js.svg?logo=github&style=flat-square&up_message=online" alt="github deployment"/>
+  </a>
+  <a href="https://lbwa.github.io/vas.js">
+    <img src="https://img.shields.io/github/last-commit/lbwa/vas.js.svg" alt="github commit"/>
+  </a>
+</p>
+
 > Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a JavaScript library for building wave-like chart.
 
 ## Installing
