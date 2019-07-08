@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0-beta.0](https://github.com/lbwa/vas.js/compare/v1.0.0-alpha.0...v1.0.0-beta.0) (2019-07-08)
+
+
+### Features
+
+* support static waves when speed is zero ([#1](https://github.com/lbwa/vas.js/issues/1)) ([6929cfc](https://github.com/lbwa/vas.js/commit/6929cfc))
+
+
+
 ## [1.0.0-alpha.0](https://github.com/lbwa/vas.js/compare/v0.4.1...v1.0.0-alpha.0) (2019-07-07)
 
 
