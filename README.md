@@ -34,13 +34,13 @@ interface WaveOption {
 }
 ```
 
-| Wave options | required | default                         | description                                                                |
-| ------------ | -------- | ------------------------------- | -------------------------------------------------------------------------- |
-| waveHeight   | ✅       | 300                             | wave height                                                                |
-| color        | -------- | white                           | wave color                                                                 |
-| progress     | -------- | 0                               | wave height based on canvas container                                      |
-| offset       | -------- | 0                               | wave offset related to point (0, 0)                                        |
-| speed        | -------- | `GlobalOptions.speed` or `-0.1` | flowing speed for animation (Priority is higher than global speed options) |
+| Wave options | required |             default             | description                                                                |
+| :----------: | :------: | :-----------------------------: | -------------------------------------------------------------------------- |
+|  waveHeight  |    ✅    |               N/A               | wave height                                                                |
+|    color     |    /     |         white (#ffffff)         | wave color                                                                 |
+|   progress   |    /     |                0                | wave height based on canvas container                                      |
+|    offset    |    /     |                0                | wave offset related to point (0, 0)                                        |
+|    speed     |    /     | `GlobalOptions.speed` or `-0.1` | flowing speed for animation (Priority is higher than global speed options) |
 
 - Global API
 
@@ -54,13 +54,13 @@ interface GlobalOptions {
 }
 ```
 
-| API    | required | default | description                         |
-| ------ | -------- | ------- | ----------------------------------- |
-| el     | ✅       | ------- | a canvas element or selector        |
-| width  | -------- | 300     | [canvas width]                      |
-| height | -------- | 300     | [canvas height]                     |
-| speed  | -------- | -0.5    | global flowing speed                |
-| waves  | ✅       | ------- | Every flowing wave with its options |
+|  API   | required | default | description                         |
+| :----: | :------: | :-----: | ----------------------------------- |
+|   el   |    ✅    |   N/A   | a canvas element or selector        |
+| width  |    /     |   300   | [canvas width]                      |
+| height |    /     |   300   | [canvas height]                     |
+| speed  |    /     |  -0.5   | global flowing speed                |
+| waves  |    ✅    |   N/A   | Every flowing wave with its options |
 
 [canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 [canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
