@@ -16,23 +16,23 @@ new Vas({
     {
       waveHeight: 30,
       color: DEFAULT_WAVE[3],
-      progress: 15,
+      progress: 55,
       offset: 70
     },
     {
       waveHeight: 30,
       color: DEFAULT_WAVE[2],
-      progress: 10,
+      progress: 50,
       offset: 70,
       speed: -0.5
     },
     {
       waveHeight: 30,
       color: DEFAULT_WAVE[1],
-      progress: 5,
+      progress: 45,
       offset: 70,
       speed: -1
     },
-    { waveHeight: 30, color: DEFAULT_WAVE[0] }
+    { waveHeight: 30, color: DEFAULT_WAVE[0], progress: 40 }
   ]
 })

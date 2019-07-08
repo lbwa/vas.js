@@ -5,25 +5,24 @@ enum DEFAULT_COLOR {
   gap = '#ccefff'
 }
 
-interface VasConstructor {
-  el: string | Element
-  height: string | number
-  width: string | number
-  speed: number
-  waves: WaveOption | WaveOption[]
-}
-
 interface WaveOption {
   waveHeight: number
-  color: string
+  color?: string
   progress?: number
   offset?: number
   speed?: number
-  step?: number
 }
 
 interface Wave extends WaveOption {
   step: number
+}
+
+interface VasConstructor {
+  el: string | HTMLCanvasElement
+  height?: number
+  width?: number
+  speed?: number
+  waves: WaveOption | WaveOption[]
 }
 
 const _worker = (function() {
@@ -52,10 +51,8 @@ class Vas {
     assert(element, `${el} is not a HTML element.`)
 
     this.el = element as HTMLCanvasElement
-    this.height = this.el.height =
-      typeof height === 'number' ? height : parseInt(height)
-    this.width = this.el.width =
-      typeof width === 'number' ? width : parseInt(width)
+    this.height = this.el.height = height || 300
+    this.width = this.el.width = width || 300
     this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
 
     this.speed = speed
@@ -85,7 +82,7 @@ class Vas {
     this.ctx.globalCompositeOperation = 'destination-atop'
     this.renderCircle({
       radius: this.width / 2 - 0.06 * this.width,
-      color: 'white'
+      color: DEFAULT_COLOR.bg
     })
     this.ctx.globalCompositeOperation = 'destination-over'
     this.renderCircle({ color: DEFAULT_COLOR.gap })
@@ -140,11 +137,12 @@ class Vas {
     const waveTotalLength = width * 2
     const waveLength = waveTotalLength / waveTotalPeriods
 
-    const centerY = height / 2
+    // Wave offset which is useful when wave freeze
     const startX = -waveLength * 2.5 + offset
-    const startY = centerY
 
-    const offsetY = startY - (progress / 100) * this.height // current wave stage
+    // current wave stage, based on the middle of wave body
+    const offsetY = height - waveHeight / 2 - (progress / 100) * height
+
     const waveColor = color
 
     this.stepper(wave, waveLength * 2)
@@ -177,14 +175,13 @@ class Vas {
   }
 
   stepper(wave: Wave, limit = this.width) {
-    wave.step += wave.speed || this.speed || -0.1
+    wave.step +=
+      wave.speed === 0 ? wave.speed : wave.speed || this.speed || -0.1
     if (
       (wave.step > 0 && wave.step >= limit) ||
       (wave.step < 0 && wave.step <= -limit)
     )
       wave.step = 0
-
-    // console.log('wave :', wave)
   }
 }
 

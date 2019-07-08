@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/docs
 
 # Log files
 npm-debug.log*
@@ -16,4 +17,6 @@ yarn-error.log*
 *.sln
 *.sw*
 
+# private shell
 release.sh
+deploy.sh

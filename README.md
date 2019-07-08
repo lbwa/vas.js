@@ -1,7 +1,32 @@
 <h1 align="center">Vas</h1>
 
 <p align="center">
-  <a href="https://lbwa.github.io/vas.js">Online</a>
+  <img align="center" src="./config/preview.gif">
+</p>
+
+<p align="center">
+  <a href="https://lbwa.github.io/vas.js">Preview</a>
+</p>
+
+<p align="center">
+  <a href="https://lbwa.github.io/vas.js">
+    <img src="https://img.shields.io/bundlephobia/minzip/vasjs.svg?style=flat-square" alt="npm bundle size"/>
+  </a>
+  <a href="https://www.npmjs.com/package/vasjs">
+    <img src="https://img.shields.io/npm/dt/vasjs.svg?style=flat-square" alt="npm"/>
+  </a>
+  <a href="https://www.npmjs.com/package/vasjs">
+    <img src="https://img.shields.io/npm/v/vasjs.svg?style=flat-square" alt="npm version"/>
+  </a>
+  <a href="https://github.com/lbwa/vas.js/releases">
+    <img src="https://img.shields.io/github/release/lbwa/vas.js.svg?style=flat-square" alt="github release"/>
+  </a>
+  <a href="https://lbwa.github.io/vas.js">
+    <img src="https://img.shields.io/website/https/lbwa.github.io/vas.js.svg?logo=github&style=flat-square&up_message=online" alt="github deployment"/>
+  </a>
+  <a href="https://lbwa.github.io/vas.js">
+    <img src="https://img.shields.io/github/last-commit/lbwa/vas.js.svg" alt="github commit"/>
+  </a>
 </p>
 
 > Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a JavaScript library for building wave-like chart.
@@ -16,56 +41,65 @@ yarn add vasjs
 npm i vasjs --save
 ```
 
-## API
+## Wave options
 
-- Wave options
+Those options is used to control every single wave-like fluid.
 
 ```ts
-interface WaveOptions {
+interface WaveOption {
   waveHeight: number
   color: string
-  progress: number
-  offset: number
-  speed: number
+  progress?: number
+  offset?: number
+  speed?: number
 }
 ```
 
-| Wave options | required | description                                                                |
-| ------------ | -------- | -------------------------------------------------------------------------- |
-| waveHeight   | ✅       | wave height                                                                |
-| color        | ✅       | wave color                                                                 |
-| progress     | ✅       | wave height based on canvas container                                      |
-| offset       | -------- | wave offset                                                                |
-| speed        | -------- | flowing speed for animation (Priority is higher than global speed options) |
+| Wave options | required |             default             | description                                                                |
+| :----------: | :------: | :-----------------------------: | -------------------------------------------------------------------------- |
+|  waveHeight  |    ✅    |               N/A               | wave height                                                                |
+|    color     |    /     |         white (#ffffff)         | wave color                                                                 |
+|   progress   |    /     |                0                | wave height based on canvas container                                      |
+|    offset    |    /     |                0                | wave offset which is useful when wave freeze                               |
+|    speed     |    /     | `GlobalOptions.speed` or `-0.1` | flowing speed for animation (Priority is higher than global speed options) |
 
-- Global API
+**NOTICE**
+
+- Wave body will be frozen when you set a **0** to wave `speed` option.
+
+## Global API
 
 ```ts
 interface GlobalOptions {
-  el: string
-  width: number
-  height: number
-  speed: number
-  waves: WaveOptions[]
+  el: string | Element
+  height?: number
+  width?: number
+  speed?: number
+  waves: WaveOption | WaveOption[]
 }
 ```
 
-| API    | required | description                         |
-| ------ | -------- | ----------------------------------- |
-| el     | ✅       | a canvas element or selector        |
-| width  | -------- | canvas width                        |
-| height | -------- | canvas height                       |
-| speed  | -------- | global flowing speed                |
-| waves  | ✅       | Every flowing wave with its options |
+|  API   | required | default | description                         |
+| :----: | :------: | :-----: | ----------------------------------- |
+|   el   |    ✅    |   N/A   | a canvas element or selector        |
+| width  |    /     |   300   | [canvas width]                      |
+| height |    /     |   300   | [canvas height]                     |
+| speed  |    /     |  -0.5   | global flowing speed                |
+| waves  |    ✅    |   N/A   | Every flowing wave with its options |
+
+[canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
+[canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 
 **NOTICE**
 
 - `GlobalOptions.speed` has a lower priority than `WaveOptions.speed`.
 
+- The last one of `GlobalOptions.waves` always be the top element in the scene
+
 ## Instantiation
 
 ```ts
-import Vas from 'Vasjs'
+import Vas from 'vasjs'
 
 enum WAVE_COLOR {
   '#42b9fb',
