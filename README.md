@@ -1,7 +1,11 @@
 <h1 align="center">Vas</h1>
 
 <p align="center">
-  <a href="https://lbwa.github.io/vas.js">Online</a>
+  <img align="center" src="./config/preview.gif">
+</p>
+
+<p align="center">
+  <a href="https://lbwa.github.io/vas.js">Preview</a>
 </p>
 
 > Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a JavaScript library for building wave-like chart.
@@ -21,42 +25,45 @@ npm i vasjs --save
 - Wave options
 
 ```ts
-interface WaveOptions {
+interface WaveOption {
   waveHeight: number
   color: string
-  progress: number
-  offset: number
-  speed: number
+  progress?: number
+  offset?: number
+  speed?: number
 }
 ```
 
-| Wave options | required | description                                                                |
-| ------------ | -------- | -------------------------------------------------------------------------- |
-| waveHeight   | ✅       | wave height                                                                |
-| color        | ✅       | wave color                                                                 |
-| progress     | ✅       | wave height based on canvas container                                      |
-| offset       | -------- | wave offset                                                                |
-| speed        | -------- | flowing speed for animation (Priority is higher than global speed options) |
+| Wave options | required | default                         | description                                                                |
+| ------------ | -------- | ------------------------------- | -------------------------------------------------------------------------- |
+| waveHeight   | ✅       | 300                             | wave height                                                                |
+| color        | -------- | white                           | wave color                                                                 |
+| progress     | -------- | 0                               | wave height based on canvas container                                      |
+| offset       | -------- | 0                               | wave offset related to point (0, 0)                                        |
+| speed        | -------- | `GlobalOptions.speed` or `-0.1` | flowing speed for animation (Priority is higher than global speed options) |
 
 - Global API
 
 ```ts
 interface GlobalOptions {
-  el: string
-  width: number
-  height: number
-  speed: number
-  waves: WaveOptions[]
+  el: string | Element
+  height?: number
+  width?: number
+  speed?: number
+  waves: WaveOption | WaveOption[]
 }
 ```
 
-| API    | required | description                         |
-| ------ | -------- | ----------------------------------- |
-| el     | ✅       | a canvas element or selector        |
-| width  | -------- | canvas width                        |
-| height | -------- | canvas height                       |
-| speed  | -------- | global flowing speed                |
-| waves  | ✅       | Every flowing wave with its options |
+| API    | required | default | description                         |
+| ------ | -------- | ------- | ----------------------------------- |
+| el     | ✅       | ------- | a canvas element or selector        |
+| width  | -------- | 300     | [canvas width]                      |
+| height | -------- | 300     | [canvas height]                     |
+| speed  | -------- | -0.5    | global flowing speed                |
+| waves  | ✅       | ------- | Every flowing wave with its options |
+
+[canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
+[canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 
 **NOTICE**
 
@@ -65,7 +72,7 @@ interface GlobalOptions {
 ## Instantiation
 
 ```ts
-import Vas from 'Vasjs'
+import Vas from 'vasjs'
 
 enum WAVE_COLOR {
   '#42b9fb',
