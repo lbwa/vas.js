@@ -41,9 +41,9 @@ yarn add vasjs
 npm i vasjs --save
 ```
 
-## API
+## Wave options
 
-- Wave options
+Those options is used to control every single wave-like fluid.
 
 ```ts
 interface WaveOption {
@@ -60,10 +60,14 @@ interface WaveOption {
 |  waveHeight  |    ✅    |               N/A               | wave height                                                                |
 |    color     |    /     |         white (#ffffff)         | wave color                                                                 |
 |   progress   |    /     |                0                | wave height based on canvas container                                      |
-|    offset    |    /     |                0                | wave offset related to point (0, 0)                                        |
+|    offset    |    /     |                0                | wave offset which is useful when wave freeze                               |
 |    speed     |    /     | `GlobalOptions.speed` or `-0.1` | flowing speed for animation (Priority is higher than global speed options) |
 
-- Global API
+**NOTICE**
+
+- Wave body will be frozen when you set a **0** to wave `speed` option.
+
+## Global API
 
 ```ts
 interface GlobalOptions {
@@ -89,6 +93,8 @@ interface GlobalOptions {
 **NOTICE**
 
 - `GlobalOptions.speed` has a lower priority than `WaveOptions.speed`.
+
+- The last one of `GlobalOptions.waves` always be the top element in the scene
 
 ## Instantiation
 
