@@ -137,11 +137,12 @@ class Vas {
     const waveTotalLength = width * 2
     const waveLength = waveTotalLength / waveTotalPeriods
 
-    const centerY = height / 2
+    // Wave offset which is useful when wave freeze
     const startX = -waveLength * 2.5 + offset
-    const startY = centerY
 
-    const offsetY = startY - (progress / 100) * this.height // current wave stage
+    // current wave stage, based on the middle of wave body
+    const offsetY = height - waveHeight / 2 - (progress / 100) * height
+
     const waveColor = color
 
     this.stepper(wave, waveLength * 2)
