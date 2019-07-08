@@ -15,7 +15,7 @@ const config = {
   output: {
     path: fromRoot('./docs'),
     filename: __DEV__ ? '[name].[hash].js' : '[name].[contenthash:8].js',
-    publicPath: './'
+    publicPath: __DEV__ ? '/' : './'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
