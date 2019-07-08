@@ -137,7 +137,7 @@ class Vas {
     const waveTotalLength = width * 2
     const waveLength = waveTotalLength / waveTotalPeriods
 
-    // Wave offset which is useful when wave freeze
+    // Wave offset is designed for static wave
     const startX = -waveLength * 2.5 + offset
 
     // current wave stage, based on the middle of wave body
