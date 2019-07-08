@@ -175,7 +175,8 @@ class Vas {
   }
 
   stepper(wave: Wave, limit = this.width) {
-    wave.step += wave.speed || this.speed || -0.1
+    wave.step +=
+      wave.speed === 0 ? wave.speed : wave.speed || this.speed || -0.1
     if (
       (wave.step > 0 && wave.step >= limit) ||
       (wave.step < 0 && wave.step <= -limit)
