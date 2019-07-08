@@ -14,7 +14,8 @@ const config = {
   },
   output: {
     path: fromRoot('./docs'),
-    filename: __DEV__ ? '[name].[hash].js' : '[name].[contenthash:8].js'
+    filename: __DEV__ ? '[name].[hash].js' : '[name].[contenthash:8].js',
+    publicPath: './'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -37,14 +38,15 @@ const config = {
       template: fromRoot('__MOCKS__/index.html')
     }),
     new WebpackBar({
-      name: 'Vas.js Dev server',
+      name: 'Vas.js bundler',
       reporter: {
         done(ctx) {
-          console.log(
-            `[DEV]: Server is running at http://localhost:${
-              config.devServer.port
-            }`
-          )
+          __DEV__ &&
+            console.log(
+              `[DEV]: Server is running at http://localhost:${
+                config.devServer.port
+              }`
+            )
         }
       }
     })
