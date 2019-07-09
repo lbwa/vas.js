@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0](https://github.com/lbwa/vas.js/compare/v1.0.0-beta.0...v1.0.0) (2019-07-09)
+
+
+### Bug Fixes
+
+* offset should be ignored when speed option set ([bf75d1f](https://github.com/lbwa/vas.js/commit/bf75d1f))
+
+
+### Features
+
+* add index.d.ts ([dbf1ae2](https://github.com/lbwa/vas.js/commit/dbf1ae2))
+* remove redundant type-judgement function ([4d70009](https://github.com/lbwa/vas.js/commit/4d70009))
+* support inversive control ([d24bb5a](https://github.com/lbwa/vas.js/commit/d24bb5a))
+
+
+
 ## [1.0.0-beta.0](https://github.com/lbwa/vas.js/compare/v1.0.0-alpha.0...v1.0.0-beta.0) (2019-07-08)
 
 
