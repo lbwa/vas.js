@@ -29,7 +29,7 @@
   </a>
 </p>
 
-> Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a JavaScript Component for building wave-like chart.
+> Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a independent component for simplifying wave-like chart building.
 
 ## Features
 
@@ -156,24 +156,24 @@ new Vas({
   waves: [
     {
       waveHeight: 30,
-      color: DEFAULT_WAVE[3],
+      color: WAVE_COLOR[3],
       progress: 55,
       offset: 70 // It will be ignored When speed option is not zero
     },
     {
       waveHeight: 30,
-      color: DEFAULT_WAVE[2],
+      color: WAVE_COLOR[2],
       progress: 50,
       offset: 70,
       speed: -0.5
     },
     {
       waveHeight: 30,
-      color: DEFAULT_WAVE[1],
+      color: WAVE_COLOR[1],
       progress: 45,
       speed: 1
     },
-    { waveHeight: 30, color: DEFAULT_WAVE[0], progress: 40 }
+    { waveHeight: 30, color: WAVE_COLOR[0], progress: 40 }
   ]
 })
 ```
