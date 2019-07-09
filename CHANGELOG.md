@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/lbwa/vas.js/compare/v1.0.0...v1.1.0) (2019-07-09)
+
+
+### Build System
+
+* modify tsconfig ([8d126c8](https://github.com/lbwa/vas.js/commit/8d126c8))
+* use rollup rather than webpack for lightwight bundle ([a4af2e6](https://github.com/lbwa/vas.js/commit/a4af2e6))
+
+
+
 ## [1.0.0](https://github.com/lbwa/vas.js/compare/v1.0.0-beta.0...v1.0.0) (2019-07-09)
 
 

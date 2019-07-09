@@ -1,6 +1,6 @@
 {
   "name": "vasjs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A independent component for simplifying wave-like chart building.",
   "main": "dist/vas.js",
   "repository": "git@github.com:lbwa/vas.js.git",
