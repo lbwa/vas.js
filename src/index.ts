@@ -137,9 +137,7 @@ class Vas {
     const waveTotalLength = width * 2
     const waveLength = waveTotalLength / waveTotalPeriods
 
-    // Wave offset is designed for static wave
-    const startX =
-      -waveLength * 2 + ((wave.speed as number) || this.speed ? 0 : offset)
+    const startX = this.balanceStarter(wave, offset)
 
     // current wave stage, based on the middle of wave body
     const offsetY = height - waveHeight / 2 - (progress / 100) * height
@@ -183,6 +181,19 @@ class Vas {
       (wave.step < 0 && wave.step <= -limit)
     )
       wave.step = 0
+  }
+
+  /**
+   * @description Used to control x value of wave start point
+   * @private
+   */
+  private balanceStarter(wave: WaveOption, optionOffset: number) {
+    const speed = wave.speed === 0 ? wave.speed : wave.speed || this.speed
+    if (speed > 0) return 0
+    if (speed < 0) return this.width * -1
+
+    // Wave offset is only works with static wave
+    return optionOffset
   }
 }
 

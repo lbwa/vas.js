@@ -17,7 +17,7 @@ new Vas({
       waveHeight: 30,
       color: DEFAULT_WAVE[3],
       progress: 55,
-      offset: 70 // It will be ignored When speed option set
+      offset: 70 // It will be ignored When speed option is not zero
     },
     {
       waveHeight: 30,
@@ -30,7 +30,7 @@ new Vas({
       waveHeight: 30,
       color: DEFAULT_WAVE[1],
       progress: 45,
-      speed: -1
+      speed: 1
     },
     { waveHeight: 30, color: DEFAULT_WAVE[0], progress: 40 }
   ]
