@@ -1,7 +1,7 @@
 {
   "name": "vasjs",
   "version": "1.0.0",
-  "description": "A JavaScript component for building wave-like chart.",
+  "description": "A independent component for simplifying wave-like chart building.",
   "main": "dist/vas.js",
   "repository": "git@github.com:lbwa/vas.js.git",
   "author": "Bowen <asyncmode@gmail.com>",
@@ -10,20 +10,24 @@
   "homepage": "https://github.com/lbwa/vas.js#readme",
   "files": [
     "dist",
-    "src",
-    "index.d.ts"
+    "src"
   ],
   "bugs": {
     "url": "https://github.com/lbwa/vas.js/issues"
   },
   "scripts": {
     "clean": "rm -vrf dist/*",
-    "build": "webpack --mode=production --config config/webpack.prod.js --progress",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config __MOCKS__/webpack.config.js"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config __MOCKS__/webpack.config.js",
+    "build": "npm run clean && npm run build:prod && npm run build:dev",
+    "build:prod": "cross-env TARGET=production rollup --config config/rollup.config.js",
+    "build:dev": "cross-env TARGET=development rollup --config config/rollup.config.js"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "rollup": "^1.16.7",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-typescript2": "^0.21.2",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.2",
     "webpack": "^4.35.0",
