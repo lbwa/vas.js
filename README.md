@@ -16,22 +16,43 @@
     <img src="https://img.shields.io/npm/dt/vasjs.svg?style=flat-square" alt="npm"/>
   </a>
   <a href="https://www.npmjs.com/package/vasjs">
-    <img src="https://img.shields.io/npm/v/vasjs.svg?style=flat-square" alt="npm version"/>
+    <img alt="npm" src="https://img.shields.io/npm/v/vasjs.svg?logo=npm&style=flat-square">
+  </a>
+  <a href="https://lbwa.github.io/vas.js">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/lbwa/vas.js.svg?style=flat-square">
   </a>
   <a href="https://github.com/lbwa/vas.js/releases">
-    <img src="https://img.shields.io/github/release/lbwa/vas.js.svg?style=flat-square" alt="github release"/>
+    <img alt="GitHub release" src="https://img.shields.io/github/release/lbwa/vas.js.svg?logo=github&style=flat-square">
   </a>
   <a href="https://lbwa.github.io/vas.js">
     <img src="https://img.shields.io/website/https/lbwa.github.io/vas.js.svg?logo=github&style=flat-square&up_message=online" alt="github deployment"/>
   </a>
-  <a href="https://lbwa.github.io/vas.js">
-    <img src="https://img.shields.io/github/last-commit/lbwa/vas.js.svg" alt="github commit"/>
-  </a>
 </p>
 
-> Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a JavaScript library for building wave-like chart.
+> Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a JavaScript Component for building wave-like chart.
 
-## Installing
+## Features
+
+1. **No any third party dependence** ✔️
+
+   - 100% independent.
+
+1. **Portable** ✔️
+
+   - Just need 3 required parameters to create your own fantastic canvas wave-like animation.
+
+     - Canvas element
+
+     - Wave height
+
+     - Number of all waves
+
+     All other options is optional.
+
+1. **Minimal** ✔️
+   - Less than 2 kB with minified and gzipped.
+
+## Install
 
 ```bash
 # yarn
@@ -57,10 +78,10 @@ interface WaveOption {
 
 | Wave options | required |             default             | description                                                                |
 | :----------: | :------: | :-----------------------------: | -------------------------------------------------------------------------- |
-|  waveHeight  |    ✅    |               N/A               | wave height                                                                |
+|  waveHeight  |    ✔️    |               N/A               | wave height                                                                |
 |    color     |    /     |         white (#ffffff)         | wave color                                                                 |
 |   progress   |    /     |                0                | wave height based on canvas container                                      |
-|    offset    |    /     |                0                | wave offset which is useful when wave freeze                               |
+|    offset    |    /     |                0                | wave offset is used for frozen waves                                       |
 |    speed     |    /     | `GlobalOptions.speed` or `-0.1` | flowing speed for animation (Priority is higher than global speed options) |
 
 **NOTICE**
@@ -71,7 +92,7 @@ interface WaveOption {
 
 ```ts
 interface GlobalOptions {
-  el: string | Element
+  el: string | HTMLCanvasElement
   height?: number
   width?: number
   speed?: number
@@ -81,11 +102,11 @@ interface GlobalOptions {
 
 |  API   | required | default | description                         |
 | :----: | :------: | :-----: | ----------------------------------- |
-|   el   |    ✅    |   N/A   | a canvas element or selector        |
+|   el   |    ✔️    |   N/A   | a canvas element or selector        |
 | width  |    /     |   300   | [canvas width]                      |
 | height |    /     |   300   | [canvas height]                     |
 | speed  |    /     |  -0.5   | global flowing speed                |
-| waves  |    ✅    |   N/A   | Every flowing wave with its options |
+| waves  |    ✔️    |   N/A   | Every flowing wave with its options |
 
 [canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 [canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
