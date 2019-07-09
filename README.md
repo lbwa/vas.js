@@ -76,13 +76,13 @@ interface WaveOption {
 }
 ```
 
-| Wave options | required |             default             | description                                                                |
-| :----------: | :------: | :-----------------------------: | -------------------------------------------------------------------------- |
-|  waveHeight  |    ✔️    |               N/A               | wave height                                                                |
-|    color     |    /     |         white (#ffffff)         | wave color                                                                 |
-|   progress   |    /     |                0                | wave height based on canvas container                                      |
-|    offset    |    /     |                0                | wave offset is used for frozen waves                                       |
-|    speed     |    /     | `GlobalOptions.speed` or `-0.1` | flowing speed for animation (Priority is higher than global speed options) |
+| Wave options | required |             default             | description                                                                                                                                                                                  |
+| :----------: | :------: | :-----------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  waveHeight  |    ✔️    |               N/A               | wave height                                                                                                                                                                                  |
+|    color     |    /     |         white (#ffffff)         | wave color                                                                                                                                                                                   |
+|   progress   |    /     |                0                | wave level based on **the bottom of canvas container**                                                                                                                                       |
+|    offset    |    /     |                0                | wave offset is used for **frozen** waves which means only works with speed zero                                                                                                              |
+|    speed     |    /     | `GlobalOptions.speed` or `-0.1` | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. Wave is static with zero speed. (Priority is **higher** than global speed options) |
 
 **NOTICE**
 
@@ -100,24 +100,43 @@ interface GlobalOptions {
 }
 ```
 
-|  API   | required | default | description                         |
-| :----: | :------: | :-----: | ----------------------------------- |
-|   el   |    ✔️    |   N/A   | a canvas element or selector        |
-| width  |    /     |   300   | [canvas width]                      |
-| height |    /     |   300   | [canvas height]                     |
-| speed  |    /     |  -0.5   | global flowing speed                |
-| waves  |    ✔️    |   N/A   | Every flowing wave with its options |
+|  API   | required | default | description                                                                                                                                     |
+| :----: | :------: | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+|   el   |    ✔️    |   N/A   | a canvas element or selector                                                                                                                    |
+| width  |    /     |   300   | [canvas width]                                                                                                                                  |
+| height |    /     |   300   | [canvas height]                                                                                                                                 |
+| speed  |    /     |  -0.5   | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
+| waves  |    ✔️    |   N/A   | Every flowing wave with its options                                                                                                             |
 
 [canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 [canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 
 **NOTICE**
 
-- `GlobalOptions.speed` has a lower priority than `WaveOptions.speed`.
+- `GlobalOptions.speed` has a **lower** priority than `WaveOptions.speed`.
 
-- The last one of `GlobalOptions.waves` always be the top element in the scene
+- The last one of `GlobalOptions.waves` always be the **top** element in the scene
 
 ## Instantiation
+
+- Minimal version
+
+```ts
+import Vas from 'vasjs'
+
+new Vas({
+  el: '#canvas',
+  waves: [
+    {
+      waveHeight: 30
+    }
+  ]
+})
+```
+
+You will see **one** wave with **wave level 0**.
+
+- Complex version
 
 ```ts
 import Vas from 'vasjs'
@@ -138,24 +157,25 @@ new Vas({
     {
       waveHeight: 30,
       color: DEFAULT_WAVE[3],
-      progress: 15,
-      offset: 70
+      progress: 55,
+      offset: 70 // It will be ignored When speed option is not zero
     },
     {
       waveHeight: 30,
       color: DEFAULT_WAVE[2],
-      progress: 10,
+      progress: 50,
       offset: 70,
       speed: -0.5
     },
     {
       waveHeight: 30,
       color: DEFAULT_WAVE[1],
-      progress: 5,
-      offset: 70,
-      speed: -1
+      progress: 45,
+      speed: 1
     },
-    { waveHeight: 30, color: DEFAULT_WAVE[0] }
+    { waveHeight: 30, color: DEFAULT_WAVE[0], progress: 40 }
   ]
 })
 ```
+
+You will see **4** waves in the canvas container. `waves[0]`, `waves[1]`, `waves[3]` are flowing from left to right, `waves[2]` is flowing from right to left.
