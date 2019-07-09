@@ -138,7 +138,8 @@ class Vas {
     const waveLength = waveTotalLength / waveTotalPeriods
 
     // Wave offset is designed for static wave
-    const startX = -waveLength * 2.5 + offset
+    const startX =
+      -waveLength * 2 + ((wave.speed as number) || this.speed ? 0 : offset)
 
     // current wave stage, based on the middle of wave body
     const offsetY = height - waveHeight / 2 - (progress / 100) * height
