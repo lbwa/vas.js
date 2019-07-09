@@ -10,7 +10,8 @@
   "homepage": "https://github.com/lbwa/vas.js#readme",
   "files": [
     "dist",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "bugs": {
     "url": "https://github.com/lbwa/vas.js/issues"
