@@ -1,8 +1,9 @@
-import { assert } from '@/_utils'
+import { assert, animator } from '@/_utils'
 
 enum DEFAULT_COLOR {
   bg = 'white',
-  gap = '#ccefff'
+  gap = '#ccefff',
+  wave = '#243d71'
 }
 
 interface WaveOption {
@@ -24,19 +25,6 @@ interface VasConstructor {
   speed?: number
   waves: WaveOption | WaveOption[]
 }
-
-const _worker = (function() {
-  return (
-    window.requestAnimationFrame.bind(window) ||
-    window.webkitRequestAnimationFrame.bind(window) ||
-    (window as any).mozRequestAnimationFrame.bind(window) ||
-    (window as any).oRequestAnimationFrame.bind(window) ||
-    (window as any).msRequestAnimationFrame.bind(window) ||
-    function(callback) {
-      return window.setTimeout(callback, 1000 / 60)
-    }
-  )
-})()
 
 class Vas {
   el: HTMLCanvasElement
@@ -87,7 +75,7 @@ class Vas {
     this.ctx.globalCompositeOperation = 'destination-over'
     this.renderCircle({ color: DEFAULT_COLOR.gap })
     this.ctx.restore()
-    _worker(this.render)
+    animator(this.render)
   }
 
   renderCircle({
@@ -118,7 +106,7 @@ class Vas {
   renderWaves(wave: Wave) {
     const {
       waveHeight,
-      color = DEFAULT_COLOR.bg,
+      color = DEFAULT_COLOR.wave,
       progress = 0,
       offset = 0
     } = wave
@@ -192,7 +180,7 @@ class Vas {
     if (speed > 0) return 0
     if (speed < 0) return this.width * -1
 
-    // Wave offset is only works with static wave
+    // Wave offset only works with static wave
     return optionOffset
   }
 }
