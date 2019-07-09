@@ -52,7 +52,7 @@
 1. **Minimal** ✔️
    - Less than 2 kB with minified and gzipped.
 
-## Install
+## Installation
 
 ```bash
 # yarn
