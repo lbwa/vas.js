@@ -27,6 +27,9 @@
   <a href="https://lbwa.github.io/vas.js">
     <img src="https://img.shields.io/website/https/lbwa.github.io/vas.js.svg?logo=github&style=flat-square&up_message=online" alt="github deployment"/>
   </a>
+  <a href="https://github.com/lbwa/vas.js/pulls?q=is%3Apr+is%3Aclosed">
+    <img alt="GitHub closed pull requests" src="https://img.shields.io/github/issues-pr-closed/lbwa/vas.js.svg?logo=github&style=flat-square">
+  </a>
 </p>
 
 > Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a independent component for simplifying wave-like chart building.
@@ -100,22 +103,26 @@ interface GlobalOptions {
 }
 ```
 
-|  API   | required | default | description                                                                                                                                     |
-| :----: | :------: | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-|   el   |    ✔️    |   N/A   | a canvas element or selector                                                                                                                    |
-| width  |    /     |   300   | [canvas width]                                                                                                                                  |
-| height |    /     |   300   | [canvas height]                                                                                                                                 |
-| speed  |    /     |  -0.5   | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
-| waves  |    ✔️    |   N/A   | Every flowing wave with its options                                                                                                             |
+|    API     | required | default | description                                                                                                                                     |
+| :--------: | :------: | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+|     el     |    ✔️    |   N/A   | A canvas element or selector                                                                                                                    |
+|   width    |    /     |   300   | [Canvas width][canvas width]                                                                                                                    |
+|   height   |    /     |   300   | [Canvas height][canvas height]                                                                                                                  |
+|   speed    |    /     |  -0.5   | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
+| innerColor |    /     |  white  | Customize the background color of inner circle                                                                                                  |
+| outerColor |    /     | #ccefff | Customize the background color of outer circle                                                                                                  |
+|   waves    |    ✔️    |   N/A   | Every flowing wave with its options                                                                                                             |
 
 [canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 [canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 
 **NOTICE**
 
-- `GlobalOptions.speed` has a **lower** priority than `WaveOptions.speed`.
+1. `GlobalOptions.speed` has a **lower** priority than `WaveOptions.speed`.
 
-- The last one of `GlobalOptions.waves` always be the **top** element in the scene
+1. The last one of `GlobalOptions.waves` always be the **top** element in the scene
+
+1. You should be careful about `innerColor` and `outerColor` options, because color alpha value could occur **color composite**.
 
 ## Instantiation
 
