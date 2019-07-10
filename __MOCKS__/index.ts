@@ -8,7 +8,7 @@ enum DEFAULT_WAVE {
 }
 
 new Vas({
-  el: '#draw',
+  el: '#normal',
   width: 300,
   height: 300,
   speed: -0.2,
@@ -33,5 +33,37 @@ new Vas({
       speed: 1
     },
     { waveHeight: 30, color: DEFAULT_WAVE[0], progress: 40 }
+  ]
+})
+
+new Vas({
+  el: '#background',
+  width: 300,
+  height: 300,
+  innerColor: 'rgba(156, 220, 253, 1)',
+  outerColor: '#ebf9ff',
+  waves: [
+    {
+      waveHeight: 15,
+      color: DEFAULT_WAVE[3],
+      progress: 54
+    },
+    {
+      waveHeight: 15,
+      color: DEFAULT_WAVE[2],
+      progress: 52,
+      speed: 1.5
+    },
+    {
+      waveHeight: 15,
+      color: DEFAULT_WAVE[1],
+      progress: 50,
+      speed: 1
+    },
+    {
+      waveHeight: 15,
+      color: DEFAULT_WAVE[0],
+      progress: 49
+    }
   ]
 })
