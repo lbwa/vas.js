@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.1.1](https://github.com/lbwa/vas.js/compare/v1.1.0...v1.1.1) (2019-07-10)
+
+
+### Build System
+
+* indicate the main declaration file in package.json ([#4](https://github.com/lbwa/vas.js/issues/4)) ([12e56d9](https://github.com/lbwa/vas.js/commit/12e56d9))
+
+
+
 ## [1.1.0](https://github.com/lbwa/vas.js/compare/v1.0.0...v1.1.0) (2019-07-09)
 
 
