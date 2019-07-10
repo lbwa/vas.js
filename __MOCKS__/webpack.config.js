@@ -35,7 +35,13 @@ const config = {
   plugins: [
     new HTMLWebpackPlugin({
       filename: 'index.html',
-      template: fromRoot('__MOCKS__/index.html')
+      template: fromRoot('__MOCKS__/index.html'),
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        minifyCSS: true
+      }
     }),
     new WebpackBar({
       name: 'Vas.js bundler',
