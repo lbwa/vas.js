@@ -1,8 +1,8 @@
 import { assert, animator } from '@/_utils'
 
 enum DEFAULT_COLOR {
-  bg = 'white',
-  gap = '#ccefff',
+  innerColor = 'white',
+  outerColor = '#ccefff',
   wave = '#243d71'
 }
 
@@ -23,6 +23,8 @@ interface VasConstructor {
   height?: number
   width?: number
   speed?: number
+  innerColor?: string
+  outerColor?: string
   waves: WaveOption | WaveOption[]
 }
 
@@ -32,9 +34,19 @@ class Vas {
   width: number
   ctx: CanvasRenderingContext2D
   speed: number
+  innerColor: string
+  outerColor: string
   waves: Wave[]
 
-  constructor({ el, height, width, speed = -0.5, waves }: VasConstructor) {
+  constructor({
+    el,
+    height,
+    width,
+    speed = -0.5,
+    innerColor,
+    outerColor,
+    waves
+  }: VasConstructor) {
     const element = el instanceof Element ? el : document.querySelector(el)
     assert(element, `${el} is not a HTML element.`)
 
@@ -44,6 +56,8 @@ class Vas {
     this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
 
     this.speed = speed
+    this.innerColor = innerColor || DEFAULT_COLOR.innerColor
+    this.outerColor = outerColor || DEFAULT_COLOR.outerColor
 
     this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
       Object.assign(wave, { step: 0 })
@@ -70,10 +84,10 @@ class Vas {
     this.ctx.globalCompositeOperation = 'destination-atop'
     this.renderCircle({
       radius: this.width / 2 - 0.06 * this.width,
-      color: DEFAULT_COLOR.bg
+      color: this.innerColor
     })
     this.ctx.globalCompositeOperation = 'destination-over'
-    this.renderCircle({ color: DEFAULT_COLOR.gap })
+    this.renderCircle({ color: this.outerColor })
     this.ctx.restore()
     animator(this.render)
   }
