@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/lbwa/vas.js/compare/v1.1.1...v1.2.0) (2019-07-10)
+
+
+### Build System
+
+* minify online html file ([ae151cb](https://github.com/lbwa/vas.js/commit/ae151cb))
+
+
+### Features
+
+* implement background customization ([ca02bf5](https://github.com/lbwa/vas.js/commit/ca02bf5))
+
+
+
 ### [1.1.1](https://github.com/lbwa/vas.js/compare/v1.1.0...v1.1.1) (2019-07-10)
 
 
