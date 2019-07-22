@@ -48,7 +48,7 @@
 
      - Wave height
 
-     - Number of all waves
+     - All members of waves
 
      All other options is optional.
 
