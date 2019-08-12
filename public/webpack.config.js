@@ -10,7 +10,7 @@ const config = {
   mode: __DEV__ ? 'development' : 'production',
   context: fromRoot('./'),
   entry: {
-    sample: fromRoot('__MOCKS__/index.ts')
+    sample: fromRoot('public/index.ts')
   },
   output: {
     path: fromRoot('./docs'),
@@ -35,7 +35,7 @@ const config = {
   plugins: [
     new HTMLWebpackPlugin({
       filename: 'index.html',
-      template: fromRoot('__MOCKS__/index.html'),
+      template: fromRoot('public/index.html'),
       minify: {
         collapseWhitespace: true,
         removeComments: true,

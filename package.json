@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -vrf dist/*",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config __MOCKS__/webpack.config.js",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config public/webpack.config.js",
     "build": "npm run clean && npm run build:prod && npm run build:dev",
     "build:prod": "cross-env TARGET=production rollup --config config/rollup.config.js",
     "build:dev": "cross-env TARGET=development rollup --config config/rollup.config.js"
