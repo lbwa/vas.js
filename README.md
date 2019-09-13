@@ -99,6 +99,7 @@ interface GlobalOptions {
   width?: number
   speed?: number
   waves: WaveOption | WaveOption[]
+  render?: (instance: Vas) => void
 }
 ```
 
