@@ -1,4 +1,4 @@
-import Vas from '../src'
+import Vas, { border } from '../src'
 
 enum DEFAULT_WAVE {
   '#42b9fb', // lighter
@@ -12,6 +12,7 @@ new Vas({
   width: 300,
   height: 300,
   speed: -0.2,
+  render: border(),
   waves: [
     {
       waveHeight: 30,
@@ -40,8 +41,7 @@ new Vas({
   el: '#background',
   width: 300,
   height: 300,
-  innerColor: 'rgba(156, 220, 253, 1)',
-  outerColor: '#ebf9ff',
+  render: extraBorder,
   waves: [
     {
       waveHeight: 15,
@@ -67,3 +67,47 @@ new Vas({
     }
   ]
 })
+
+function extraBorder({
+  ctx,
+  width: radius
+}: {
+  ctx: CanvasRenderingContext2D
+  width: number
+  [key: string]: any
+}) {
+  ctx.globalCompositeOperation = 'destination-atop'
+  renderCircle({
+    ctx,
+    radius: radius / 2 - 0.06 * radius,
+    color: 'rgba(156, 220, 253, 1)'
+  })
+  ctx.globalCompositeOperation = 'destination-over'
+  renderCircle({ ctx, radius: radius / 2, color: '#ebf9ff' })
+}
+
+function renderCircle({
+  ctx,
+  x = 150,
+  y = 150,
+  radius,
+  startAngle = 0,
+  endAngle = 2 * Math.PI,
+  anticlockwise,
+  color
+}: {
+  ctx: CanvasRenderingContext2D
+  x?: number
+  y?: number
+  radius: number
+  startAngle?: number
+  endAngle?: number
+  anticlockwise?: boolean | undefined
+  color: string
+}) {
+  ctx.beginPath()
+  ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise)
+  ctx.fillStyle = color
+  ctx.fill()
+  ctx.closePath()
+}

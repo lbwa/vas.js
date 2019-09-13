@@ -18,14 +18,8 @@
   <a href="https://www.npmjs.com/package/vasjs">
     <img alt="npm" src="https://img.shields.io/npm/v/vasjs.svg?logo=npm&style=flat-square">
   </a>
-  <a href="https://lbwa.github.io/vas.js">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/lbwa/vas.js.svg?style=flat-square">
-  </a>
   <a href="https://github.com/lbwa/vas.js/releases">
     <img alt="GitHub release" src="https://img.shields.io/github/release/lbwa/vas.js.svg?logo=github&style=flat-square">
-  </a>
-  <a href="https://lbwa.github.io/vas.js">
-    <img src="https://img.shields.io/website/https/lbwa.github.io/vas.js.svg?logo=github&style=flat-square&up_message=online" alt="github deployment"/>
   </a>
   <a href="https://github.com/lbwa/vas.js/pulls?q=is%3Apr+is%3Aclosed">
     <img alt="GitHub closed pull requests" src="https://img.shields.io/github/issues-pr-closed/lbwa/vas.js.svg?logo=github&style=flat-square">
@@ -36,9 +30,13 @@
 
 ## Features
 
-1. **No any third party dependence** ✔️
+1. **Minimal** ✔️
 
-   - 100% independent.
+   - Less than **2** kB with minified and gzipped.
+
+1. **Support any shapes** ✔️
+
+   - You can define single or multiple shapes for waves container or anything you want to do via `render` option.
 
 1. **Portable** ✔️
 
@@ -52,8 +50,9 @@
 
      All other options is optional.
 
-1. **Minimal** ✔️
-   - Less than 2 kB with minified and gzipped.
+1. **No any third party dependence** ✔️
+
+   - 100% independent.
 
 ## Installation
 
@@ -82,7 +81,7 @@ interface WaveOption {
 | Wave options | required |             default             | description                                                                                                                                                                                  |
 | :----------: | :------: | :-----------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |  waveHeight  |    ✔️    |               N/A               | wave height                                                                                                                                                                                  |
-|    color     |    /     |         white (#ffffff)         | wave color                                                                                                                                                                                   |
+|    color     |    /     |            `#243d71`            | wave color                                                                                                                                                                                   |
 |   progress   |    /     |                0                | wave level based on **the bottom of canvas container**                                                                                                                                       |
 |    offset    |    /     |                0                | wave offset is used for **frozen** waves which means only works with speed zero                                                                                                              |
 |    speed     |    /     | `GlobalOptions.speed` or `-0.1` | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. Wave is static with zero speed. (Priority is **higher** than global speed options) |
@@ -103,26 +102,38 @@ interface GlobalOptions {
 }
 ```
 
-|    API     | required | default | description                                                                                                                                     |
-| :--------: | :------: | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-|     el     |    ✔️    |   N/A   | A canvas element or selector                                                                                                                    |
-|   width    |    /     |   300   | [Canvas width][canvas width]                                                                                                                    |
-|   height   |    /     |   300   | [Canvas height][canvas height]                                                                                                                  |
-|   speed    |    /     |  -0.5   | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
-| innerColor |    /     |  white  | Customize the background color of inner circle                                                                                                  |
-| outerColor |    /     | #ccefff | Customize the background color of outer circle                                                                                                  |
-|   waves    |    ✔️    |   N/A   | Every flowing wave with its options                                                                                                             |
+|  API   | required | default | description                                                                                                                                     |
+| :----: | :------: | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+|   el   |    ✔️    |   N/A   | A canvas element or selector                                                                                                                    |
+| width  |    /     |  `300`  | [Canvas width][canvas width]                                                                                                                    |
+| height |    /     |  `300`  | [Canvas height][canvas height]                                                                                                                  |
+| speed  |    /     | `-0.5`  | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
+| waves  |    ✔️    |   N/A   | Every flowing wave with its options                                                                                                             |
+| render |    /     |   N/A   | Define a render function which will pass a Vas instance including [CanvasRenderingContext2D]                                                    |
 
 [canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 [canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
+[canvasrenderingcontext2d]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 
 **NOTICE**
 
 1. `GlobalOptions.speed` has a **lower** priority than `WaveOptions.speed`.
 
-1. The last one of `GlobalOptions.waves` always be the **top** element in the scene
+1. The last one of `GlobalOptions.waves` always be the **top** element in the scene.
 
-1. You should be careful about `innerColor` and `outerColor` options, because color alpha value could occur **color composite**.
+1. You should be careful about `render` options and color alpha value, because color alpha value could occur **color composite**.
+
+   ```ts
+   import Vas from 'vasjs'
+
+   new Vas({
+     // other options ...
+     render: ({ ctx }: Vas) => {
+       // There are properties including current canvas context, do anything you want to do.
+       // All context state will be saved before render calling, then restored after render calling
+     }
+   })
+   ```
 
 ## Instantiation
 
@@ -186,3 +197,11 @@ new Vas({
 ```
 
 You will see **4** waves in the canvas container. `waves[0]`, `waves[1]`, `waves[3]` are flowing from left to right, `waves[2]` is flowing from right to left.
+
+## Changelog
+
+All notable changes to this project will be documented in [CHANGELOG](./CHANGELOG.md) file.
+
+## License
+
+MIT © [Bowen Liu](https://github.com/lbwa)

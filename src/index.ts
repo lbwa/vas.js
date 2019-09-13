@@ -1,10 +1,7 @@
-import { assert, animator } from '@/_utils'
+import { assert, animator } from '@/utils'
+export * from './helper'
 
-enum DEFAULT_COLOR {
-  innerColor = 'white',
-  outerColor = '#ccefff',
-  wave = '#243d71'
-}
+const DEFAULT_WAVE_COLOR = '#243d71'
 
 interface WaveOption {
   waveHeight: number
@@ -23,29 +20,26 @@ interface VasConstructor {
   height?: number
   width?: number
   speed?: number
-  innerColor?: string
-  outerColor?: string
   waves: WaveOption | WaveOption[]
+  render?: (instance: Vas) => void
 }
 
-class Vas {
+export default class Vas {
   el: HTMLCanvasElement
   height: number
   width: number
   ctx: CanvasRenderingContext2D
   speed: number
-  innerColor: string
-  outerColor: string
   waves: Wave[]
+  renderer: (...payload: any[]) => void
 
   constructor({
     el,
     height,
     width,
     speed = -0.5,
-    innerColor,
-    outerColor,
-    waves
+    waves,
+    render
   }: VasConstructor) {
     const element = el instanceof Element ? el : document.querySelector(el)
     assert(element, `${el} is not a HTML element.`)
@@ -53,74 +47,52 @@ class Vas {
     this.el = element as HTMLCanvasElement
     this.height = this.el.height = height || 300
     this.width = this.el.width = width || 300
-    this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
-
     this.speed = speed
-    this.innerColor = innerColor || DEFAULT_COLOR.innerColor
-    this.outerColor = outerColor || DEFAULT_COLOR.outerColor
-
     this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
       Object.assign(wave, { step: 0 })
     )
+    this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
 
     assert(
       this.ctx,
       'Unable to initialize Canvas. Your browser or machine may not support it.'
     )
 
-    this.render()
+    this.renderer =
+      typeof render === 'function'
+        ? this.enhanceRenderer.bind(this, render)
+        : this.basicRenderer
+
+    this.renderer()
   }
 
   clear() {
     this.ctx.clearRect(0, 0, this.width, this.height)
   }
 
-  render = () => {
+  private basicRenderer = () => {
     this.clear()
-    this.ctx.save()
     for (const wave of this.waves) {
       this.renderWaves(wave)
     }
-    this.ctx.globalCompositeOperation = 'destination-atop'
-    this.renderCircle({
-      radius: this.width / 2 - 0.06 * this.width,
-      color: this.innerColor
-    })
-    this.ctx.globalCompositeOperation = 'destination-over'
-    this.renderCircle({ color: this.outerColor })
-    this.ctx.restore()
-    animator(this.render)
+    animator(this.renderer)
   }
 
-  renderCircle({
-    x = this.width / 2,
-    y = this.height / 2,
-    radius = this.width / 2,
-    startAngle = 0,
-    endAngle = 2 * Math.PI,
-    anticlockwise,
-    color
-  }: {
-    x?: number
-    y?: number
-    radius?: number
-    startAngle?: number
-    endAngle?: number
-    anticlockwise?: boolean | undefined
-    color: string
-  }) {
-    const { ctx } = this
-    ctx.beginPath()
-    ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise)
-    ctx.fillStyle = color
-    ctx.fill()
-    ctx.closePath()
+  private enhanceRenderer(render: VasConstructor['render']) {
+    this.clear()
+    for (const wave of this.waves) {
+      this.renderWaves(wave)
+    }
+    this.ctx.save()
+    render && render(this)
+    this.ctx.restore()
+    animator(this.renderer)
   }
 
   renderWaves(wave: Wave) {
     const {
       waveHeight,
-      color = DEFAULT_COLOR.wave,
+      color = DEFAULT_WAVE_COLOR,
       progress = 0,
       offset = 0
     } = wave
@@ -198,5 +170,3 @@ class Vas {
     return optionOffset
   }
 }
-
-export default Vas
