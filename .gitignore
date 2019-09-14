@@ -20,3 +20,6 @@ yarn-error.log*
 # private shell
 release.sh
 deploy.sh
+
+# microbunble cache
+.rts2_cache*
