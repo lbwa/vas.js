@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0](https://github.com/lbwa/vas.js/compare/v1.2.0...v2.0.0) (2019-09-14)
+
+
+### Features
+
+* **Vas:** rebuild render loop, implement 'render' option ([de8e0e4](https://github.com/lbwa/vas.js/commit/de8e0e4))
+
 ## [1.2.0](https://github.com/lbwa/vas.js/compare/v1.1.1...v1.2.0) (2019-07-10)
 
 
