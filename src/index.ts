@@ -13,6 +13,7 @@ interface WaveOption {
 
 interface Wave extends WaveOption {
   step: number
+  startX: number
 }
 
 interface VasConstructor {
@@ -49,7 +50,10 @@ export default class Vas {
     this.width = this.el.width = width || 300
     this.speed = speed
     this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
-      Object.assign(wave, { step: 0 })
+      Object.assign(wave, {
+        step: 0,
+        startX: this.getStartX(wave, wave.offset || 0)
+      })
     )
     this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
 
@@ -94,7 +98,7 @@ export default class Vas {
       waveHeight,
       color = DEFAULT_WAVE_COLOR,
       progress = 0,
-      offset = 0
+      startX
     } = wave
     const { ctx, width, height } = this
 
@@ -110,8 +114,6 @@ export default class Vas {
      */
     const waveTotalLength = width * 2
     const waveLength = waveTotalLength / waveTotalPeriods
-
-    const startX = this.balanceStarter(wave, offset)
 
     // current wave stage, based on the middle of wave body
     const offsetY = height - waveHeight / 2 - (progress / 100) * height
@@ -161,7 +163,7 @@ export default class Vas {
    * @description Used to control x value of wave start point
    * @private
    */
-  private balanceStarter(wave: WaveOption, optionOffset: number) {
+  private getStartX(wave: WaveOption, optionOffset: number) {
     const speed = wave.speed === 0 ? wave.speed : wave.speed || this.speed
     if (speed > 0) return 0
     if (speed < 0) return this.width * -1
