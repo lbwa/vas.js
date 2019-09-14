@@ -24,6 +24,9 @@
   <a href="https://github.com/lbwa/vas.js/pulls?q=is%3Apr+is%3Aclosed">
     <img alt="GitHub closed pull requests" src="https://img.shields.io/github/issues-pr-closed/lbwa/vas.js.svg?logo=github&style=flat-square">
   </a>
+  <a href="https://github.com/lbwa/vas.js/actions">
+    <img alt="github workflow" src="https://github.com/lbwa/vas.js/workflows/Deployment/badge.svg">
+  </a>
 </p>
 
 > Vas which is taken from the letters of [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) is a independent component for simplifying wave-like chart building.
