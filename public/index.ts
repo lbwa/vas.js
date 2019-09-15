@@ -7,10 +7,11 @@ enum DEFAULT_WAVE {
   '#243d71' // deeper
 }
 
+const RADIUS_NORMAL = 300
 new Vas({
-  el: '#normal',
-  width: 300,
-  height: 300,
+  el: '#with-border-helper',
+  width: RADIUS_NORMAL,
+  height: RADIUS_NORMAL,
   speed: -0.2,
   render: border(),
   waves: [
@@ -38,9 +39,9 @@ new Vas({
 })
 
 new Vas({
-  el: '#background',
-  width: 300,
-  height: 300,
+  el: '#with-custom-render',
+  width: 200,
+  height: 200,
   render: extraBorder,
   waves: [
     {
@@ -79,11 +80,19 @@ function extraBorder({
   ctx.globalCompositeOperation = 'destination-atop'
   renderCircle({
     ctx,
+    x: radius / 2,
+    y: radius / 2,
     radius: radius / 2 - 0.06 * radius,
     color: 'rgba(156, 220, 253, 1)'
   })
   ctx.globalCompositeOperation = 'destination-over'
-  renderCircle({ ctx, radius: radius / 2, color: '#ebf9ff' })
+  renderCircle({
+    ctx,
+    x: radius / 2,
+    y: radius / 2,
+    radius: radius / 2,
+    color: '#ebf9ff'
+  })
 }
 
 function renderCircle({
