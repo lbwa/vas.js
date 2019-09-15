@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0](https://github.com/lbwa/vas.js/compare/v2.0.0...v2.1.0) (2019-09-15)
+
+
+### Bug Fixes
+
+* **helper:** correct border center coordinates ([98263fc](https://github.com/lbwa/vas.js/commit/98263fc))
+
+
+### Features
+
+* **core:** cache startX value ([3c98928](https://github.com/lbwa/vas.js/commit/3c98928))
+* **core:** implement custom period ([ecbce22](https://github.com/lbwa/vas.js/commit/ecbce22))
+* implement destruction functionality ([9cd89ad](https://github.com/lbwa/vas.js/commit/9cd89ad))
+* perform correction based on whether period is even num ([c79c1e6](https://github.com/lbwa/vas.js/commit/c79c1e6))
+
 ## [2.0.0](https://github.com/lbwa/vas.js/compare/v1.2.0...v2.0.0) (2019-09-14)
 
 
