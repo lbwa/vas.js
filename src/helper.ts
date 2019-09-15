@@ -14,16 +14,28 @@ export function border({
     [key: string]: any
   }) {
     ctx.globalCompositeOperation = 'destination-atop'
-    renderCircle({ ctx, radius: radius / 2 - 0.06 * radius, color: inner })
+    renderCircle({
+      ctx,
+      x: radius / 2,
+      y: radius / 2,
+      radius: radius / 2 - 0.06 * radius,
+      color: inner
+    })
     ctx.globalCompositeOperation = 'destination-over'
-    renderCircle({ ctx, radius: radius / 2, color: outer })
+    renderCircle({
+      ctx,
+      x: radius / 2,
+      y: radius / 2,
+      radius: radius / 2,
+      color: outer
+    })
   }
 }
 
 function renderCircle({
   ctx,
-  x = 150,
-  y = 150,
+  x = 0,
+  y = 0,
   radius,
   startAngle = 0,
   endAngle = 2 * Math.PI,
