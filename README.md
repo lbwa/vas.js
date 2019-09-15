@@ -81,13 +81,14 @@ interface WaveOption {
 }
 ```
 
-| Wave options | required |             default             | description                                                                                                                                                                                  |
-| :----------: | :------: | :-----------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  waveHeight  |    ✔️    |               N/A               | wave height                                                                                                                                                                                  |
-|    color     |    /     |            `#243d71`            | wave color                                                                                                                                                                                   |
-|   progress   |    /     |                0                | wave level based on **the bottom of canvas container**                                                                                                                                       |
-|    offset    |    /     |                0                | wave offset is used for **frozen** waves which means only works with speed zero                                                                                                              |
-|    speed     |    /     | `GlobalOptions.speed` or `-0.1` | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. Wave is static with zero speed. (Priority is **higher** than global speed options) |
+| Wave options | required |               default               | description                                                                                                                                                                                  |
+| :----------: | :------: | :---------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  waveHeight  |    ✔️    |                 N/A                 | wave height                                                                                                                                                                                  |
+|    color     |    /     |              `#243d71`              | wave color                                                                                                                                                                                   |
+|   progress   |    /     |                  0                  | wave level based on **the bottom of canvas container**                                                                                                                                       |
+|    offset    |    /     |                  0                  | wave offset is used for **frozen** waves which means only works with speed zero                                                                                                              |
+|    speed     |    /     |   `GlobalOptions.speed` or `-0.1`   | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. Wave is static with zero speed. (Priority is **higher** than global speed options) |
+|    period    |    /     | Global [period](#global-api) option | Period of current wave                                                                                                                                                                       |
 
 **NOTICE**
 
@@ -106,14 +107,15 @@ interface GlobalOptions {
 }
 ```
 
-|  API   | required | default | description                                                                                                                                     |
-| :----: | :------: | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-|   el   |    ✔️    |   N/A   | A canvas element or selector                                                                                                                    |
-| width  |    /     |  `300`  | [Canvas width][canvas width]                                                                                                                    |
-| height |    /     |  `300`  | [Canvas height][canvas height]                                                                                                                  |
-| speed  |    /     | `-0.5`  | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
-| waves  |    ✔️    |   N/A   | Every flowing wave with its options                                                                                                             |
-| render |    /     |   N/A   | Define a render function which will pass a Vas instance including [CanvasRenderingContext2D]                                                    |
+|  API   | required |                                              default                                              | description                                                                                                                                     |
+| :----: | :------: | :-----------------------------------------------------------------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+|   el   |    ✔️    |                                                N/A                                                | A canvas element or selector                                                                                                                    |
+| width  |    /     |                                               `300`                                               | [Canvas width][canvas width]                                                                                                                    |
+| height |    /     |                                               `300`                                               | [Canvas height][canvas height]                                                                                                                  |
+| speed  |    /     |                                              `-0.5`                                               | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
+| waves  |    ✔️    |                                                N/A                                                | Every flowing wave with its options                                                                                                             |
+| render |    /     |                                                N/A                                                | Define a render function which will pass a Vas instance including [CanvasRenderingContext2D]                                                    |
+| period |    /     | The value of a number rounded to the nearest quotient between global width and default lambda 60. | The period of waves                                                                                                                             |
 
 [canvas width]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 [canvas height]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
@@ -201,6 +203,23 @@ new Vas({
 ```
 
 You will see **4** waves in the canvas container. `waves[0]`, `waves[1]`, `waves[3]` are flowing from left to right, `waves[2]` is flowing from right to left.
+
+- with [helper](./src/helper.ts) functionalities, only support `border` temporarily.
+
+```ts
+import Vas, { border } from 'vasjs'
+
+new Vas({
+  // other options...
+  render: border({
+    // inner: 'white',
+    // outer: '#ccefff'
+  })
+  // extra options ...
+})
+```
+
+You will see the shapes like [demo](https://lbwa.github.io/vas.js) page style.
 
 ## Changelog
 
