@@ -113,6 +113,10 @@ export default class Vas {
     this.ctx.clearRect(0, 0, this.width, this.height)
   }
 
+  destroy(fn?: (...payload: any[]) => any) {
+    this.renderer = () => fn && fn()
+  }
+
   private basicRenderer = () => {
     this.clear()
     for (const wave of this.waves) {
