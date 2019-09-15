@@ -2,6 +2,8 @@ import { assert, animator } from '@/utils'
 export * from './helper'
 
 const DEFAULT_WAVE_COLOR = '#243d71'
+// To control MAX value of step number
+const ENTIRE_WAVES_OFFSET_TIME = 2
 
 interface WaveOption {
   waveHeight: number
@@ -11,10 +13,16 @@ interface WaveOption {
   speed?: number
 }
 
-interface Wave extends WaveOption {
+interface WaveMeta {
   step: number
   startX: number
+  offsetY: number
+  totalPeriods: number
+  totalLength: number
+  lambda: number
 }
+
+type Wave = WaveOption & WaveMeta
 
 interface VasConstructor {
   el: string | HTMLCanvasElement
@@ -23,6 +31,7 @@ interface VasConstructor {
   speed?: number
   waves: WaveOption | WaveOption[]
   render?: (instance: Vas) => void
+  lambda?: number
 }
 
 export default class Vas {
@@ -33,6 +42,7 @@ export default class Vas {
   speed: number
   waves: Wave[]
   renderer: (...payload: any[]) => void
+  lambda: number
 
   constructor({
     el,
@@ -40,7 +50,8 @@ export default class Vas {
     width,
     speed = -0.5,
     waves,
-    render
+    render,
+    lambda
   }: VasConstructor) {
     const element = el instanceof Element ? el : document.querySelector(el)
     assert(element, `${el} is not a HTML element.`)
@@ -48,12 +59,10 @@ export default class Vas {
     this.el = element as HTMLCanvasElement
     this.height = this.el.height = height || 300
     this.width = this.el.width = width || 300
+    this.lambda = lambda || Math.round(this.width / 5)
     this.speed = speed
     this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
-      Object.assign(wave, {
-        step: 0,
-        startX: this.getStartX(wave, wave.offset || 0)
-      })
+      Object.assign(wave, this.createWaveMeta(wave))
     )
     this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
 
@@ -68,6 +77,32 @@ export default class Vas {
         : this.basicRenderer
 
     this.renderer()
+  }
+
+  createWaveMeta(wave: WaveOption) {
+    const meta = { step: 0 } as WaveMeta
+    const { offset, waveHeight, progress = 0 } = wave
+    meta.startX = this.getStartX(wave, offset || 0)
+
+    /**
+     * @description The distance over which the wave's shape repeats
+     * @wiki https://en.wikipedia.org/wiki/Wavelength
+     */
+    meta.totalLength = this.width * ENTIRE_WAVES_OFFSET_TIME
+
+    /**
+     * @description Similar to wave spatial frequency, but this describe how
+     *  many period exist in entire life-cycle, not unit of space
+     * @wiki https://en.wikipedia.org/wiki/Spatial_frequency
+     */
+    const period = 5
+    meta.totalPeriods = period % 2 ? period + 1 : period
+    meta.lambda = meta.totalLength / meta.totalPeriods
+
+    // current wave stage, based on the middle of wave body
+    meta.offsetY = this.height - waveHeight / 2 - (progress / 100) * this.height
+
+    return meta
   }
 
   clear() {
@@ -97,59 +132,43 @@ export default class Vas {
     const {
       waveHeight,
       color = DEFAULT_WAVE_COLOR,
-      progress = 0,
-      startX
+      startX,
+      totalLength,
+      totalPeriods,
+      lambda,
+      offsetY
     } = wave
-    const { ctx, width, height } = this
+    const { ctx, height } = this
 
-    /**
-     * @description Similar to wave spatial frequency, but this describe how
-     *  many period exist in entries life-cycle, not unit of space
-     * @wiki https://en.wikipedia.org/wiki/Spatial_frequency
-     */
-    const waveTotalPeriods = 5
-    /**
-     * @description The distance over which the wave's shape repeats
-     * @wiki https://en.wikipedia.org/wiki/Wavelength
-     */
-    const waveTotalLength = width * 2
-    const waveLength = waveTotalLength / waveTotalPeriods
-
-    // current wave stage, based on the middle of wave body
-    const offsetY = height - waveHeight / 2 - (progress / 100) * height
-
-    const waveColor = color
-
-    this.stepper(wave, waveLength * 2)
-
-    ctx.fillStyle = waveColor
+    ctx.fillStyle = color
     ctx.beginPath()
+    this.stepper(wave, totalLength / ENTIRE_WAVES_OFFSET_TIME)
     ctx.moveTo(startX - wave.step, offsetY)
 
-    for (let i = 0; i < waveTotalPeriods; i++) {
-      const dx = waveLength * i
+    for (let i = 0; i < totalPeriods; i++) {
+      const dx = lambda * i
       const offsetX = dx + startX - wave.step
       ctx.quadraticCurveTo(
-        offsetX + waveLength / 4,
+        offsetX + lambda / 4,
         offsetY + waveHeight,
-        offsetX + waveLength / 2,
+        offsetX + lambda / 2,
         offsetY
       )
       ctx.quadraticCurveTo(
-        offsetX + waveLength / 4 + waveLength / 2,
+        offsetX + lambda / 4 + lambda / 2,
         offsetY - waveHeight,
-        offsetX + waveLength,
+        offsetX + lambda,
         offsetY
       )
     }
 
-    ctx.lineTo(startX + waveTotalLength, height)
+    ctx.lineTo(startX + totalLength, height)
     ctx.lineTo(startX, height)
     ctx.fill()
     ctx.closePath()
   }
 
-  stepper(wave: Wave, limit = this.width) {
+  stepper(wave: Wave, limit = 0) {
     wave.step +=
       wave.speed === 0 ? wave.speed : wave.speed || this.speed || -0.1
     if (
