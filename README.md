@@ -221,6 +221,32 @@ new Vas({
 
 You will see the shapes like [demo](https://lbwa.github.io/vas.js) page style.
 
+## Instance methods
+
+```ts
+const scene = new Vas({
+  /* omit options ... */
+})
+```
+
+All following APIs are based on a `Vas` instance.
+
+|               API                |        Description         |
+| :------------------------------: | :------------------------: |
+| [destroy](#destroy-vas-instance) | Destroy all render process |
+
+### Destroy Vas instance
+
+- `destroy`: (fn?: Function | undefined) => void
+
+This method which accepts a callback function will stop all render process.
+
+```ts
+scene.destroy()
+// or
+scene.destroy(() => console.log('Destroyed !'))
+```
+
 ## Changelog
 
 All notable changes to this project will be documented in [CHANGELOG](./CHANGELOG.md) file.
