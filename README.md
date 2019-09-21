@@ -247,6 +247,21 @@ scene.destroy()
 scene.destroy(() => console.log('Destroyed !'))
 ```
 
+## Hight resolution adaptation
+
+Hight resolution adaptation based on `window.devicePixelRatio` has been supported by default (since `v2.2.0`).
+
+If you need to change default ratio:
+
+```ts
+import Vas from 'vasjs'
+
+new Vas({
+  devicePixelRatio: YOUR_RATIO // Should be greater than one
+  // ... extra options ...
+})
+```
+
 ## Changelog
 
 All notable changes to this project will be documented in [CHANGELOG](./CHANGELOG.md) file.

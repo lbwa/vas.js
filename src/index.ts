@@ -36,9 +36,11 @@ interface VasConstructor {
   waves: WaveOption | WaveOption[]
   render?: (instance: Vas) => void
   period?: number
+  devicePixelRatio?: number
 }
 
 export default class Vas {
+  dpr: number
   el: HTMLCanvasElement
   height: number
   width: number
@@ -55,24 +57,34 @@ export default class Vas {
     speed = -0.5,
     waves,
     render,
-    period
+    period,
+    devicePixelRatio = window.devicePixelRatio
   }: VasConstructor) {
     const element = el instanceof Element ? el : document.querySelector(el)
     assert(element, `${el} is not a HTML element.`)
-
-    this.el = element as HTMLCanvasElement
-    this.height = this.el.height = height || DEFAULT_HEIGHT
-    this.width = this.el.width = width || DEFAULT_WIDTH
-    this.period = period || Math.round(this.width / DEFAULT_LAMBDA)
-    this.speed = speed
-    this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
-      Object.assign(wave, this.createWaveMeta(wave))
+    assert(
+      this instanceof Vas,
+      'Constructor should be invoked by **new** keyword.'
     )
+
+    this.dpr = devicePixelRatio || 1
+    this.el = element as HTMLCanvasElement
     this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
 
     assert(
       this.ctx,
       'Unable to initialize Canvas. Your browser or machine may not support it.'
+    )
+
+    // Handle canvas resolution
+    this.height = height || DEFAULT_HEIGHT
+    this.width = width || DEFAULT_WIDTH
+    this.correctCanvasResolution()
+
+    this.period = period || Math.round(this.width / DEFAULT_LAMBDA)
+    this.speed = speed
+    this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
+      Object.assign(wave, this.createWaveMeta(wave))
     )
 
     this.renderer =
@@ -81,6 +93,28 @@ export default class Vas {
         : this.basicRenderer
 
     this.renderer()
+  }
+
+  correctCanvasResolution() {
+    const { el: canvas, ctx, width, height } = this
+
+    // set display size (css pixel)
+    canvas.style.width = width + 'px'
+    canvas.style.height = height + 'px'
+
+    // set actual size in memory (scaled to account for extra pixel density)
+    canvas.width = width * this.dpr
+    canvas.height = height * this.dpr
+
+    ctx.scale(this.dpr, this.dpr)
+  }
+
+  clear() {
+    this.ctx.clearRect(0, 0, this.width, this.height)
+  }
+
+  destroy(fn?: (...payload: any[]) => any) {
+    this.renderer = () => fn && fn()
   }
 
   createWaveMeta(wave: WaveOption) {
@@ -107,14 +141,6 @@ export default class Vas {
     meta.offsetY = this.height - waveHeight / 2 - (progress / 100) * this.height
 
     return meta
-  }
-
-  clear() {
-    this.ctx.clearRect(0, 0, this.width, this.height)
-  }
-
-  destroy(fn?: (...payload: any[]) => any) {
-    this.renderer = () => fn && fn()
   }
 
   private basicRenderer = () => {
@@ -163,7 +189,7 @@ export default class Vas {
         offsetY
       )
       ctx.quadraticCurveTo(
-        offsetX + lambda / 4 + lambda / 2,
+        offsetX + (lambda / 4 + lambda / 2),
         offsetY - waveHeight,
         offsetX + lambda,
         offsetY

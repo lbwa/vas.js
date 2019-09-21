@@ -11,7 +11,6 @@ export function border({
   }: {
     ctx: CanvasRenderingContext2D
     width: number
-    [key: string]: any
   }) {
     ctx.globalCompositeOperation = 'destination-atop'
     renderCircle({
