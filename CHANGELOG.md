@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0](https://github.com/lbwa/vas.js/compare/v2.1.0...v2.2.0) (2019-09-21)
+
+
+### Features
+
+* **DPR:** support hight resolution adaptation ([081d8f3](https://github.com/lbwa/vas.js/commit/081d8f3)), closes [/github.com/chartjs/Chart.js/blob/v2.8.0/src/core/core.helpers.js#L527-L537](https://github.com/lbwa//github.com/chartjs/Chart.js/blob/v2.8.0/src/core/core.helpers.js/issues/L527-L537)
+
 ## [2.1.0](https://github.com/lbwa/vas.js/compare/v2.0.0...v2.1.0) (2019-09-15)
 
 
