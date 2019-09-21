@@ -257,8 +257,8 @@ If you need to change default ratio:
 import Vas from 'vasjs'
 
 new Vas({
-  devicePixelRatio: YOUR_RATIO // Should be greater than one
-  // ... extra options ...
+  devicePixelRatio: YOUR_RATIO // should be greater than one
+  // omit other options ...
 })
 ```
 
