@@ -1,4 +1,4 @@
-import Vas, { border } from '../src'
+import createApp, { border } from '../src'
 
 enum DEFAULT_WAVE {
   '#42b9fb', // lighter
@@ -8,7 +8,7 @@ enum DEFAULT_WAVE {
 }
 
 const RADIUS_NORMAL = 300
-new Vas({
+createApp({
   el: '#with-border-helper',
   width: RADIUS_NORMAL,
   height: RADIUS_NORMAL,
@@ -16,29 +16,29 @@ new Vas({
   render: border(),
   waves: [
     {
-      waveHeight: 30,
-      color: DEFAULT_WAVE[3],
-      progress: 55,
-      offset: 70 // It will be ignored When speed option is not zero
+      height: 30,
+      color: DEFAULT_WAVE[0],
+      progress: 40,
+      offset: 10 // It will be ignored When speed option is not zero
     },
     {
-      waveHeight: 30,
-      color: DEFAULT_WAVE[2],
-      progress: 50,
+      height: 30,
+      color: DEFAULT_WAVE[1],
+      progress: 45,
       offset: 70,
       speed: -0.5
     },
     {
-      waveHeight: 30,
-      color: DEFAULT_WAVE[1],
-      progress: 45,
+      height: 30,
+      color: DEFAULT_WAVE[2],
+      progress: 50,
       speed: 0.8
     },
-    { waveHeight: 30, color: DEFAULT_WAVE[0], progress: 40 }
+    { height: 30, color: DEFAULT_WAVE[3], progress: 55 }
   ]
 })
 
-new Vas({
+createApp({
   el: '#with-custom-render',
   width: 200,
   height: 200,
@@ -48,26 +48,26 @@ new Vas({
   }),
   waves: [
     {
-      waveHeight: 15,
-      color: DEFAULT_WAVE[3],
-      progress: 54
+      height: 15,
+      color: DEFAULT_WAVE[0],
+      progress: 49
     },
     {
-      waveHeight: 15,
-      color: DEFAULT_WAVE[2],
-      progress: 52,
-      speed: 0.8
-    },
-    {
-      waveHeight: 15,
+      height: 15,
       color: DEFAULT_WAVE[1],
       progress: 50,
       speed: 0.6
     },
     {
-      waveHeight: 15,
-      color: DEFAULT_WAVE[0],
-      progress: 49
+      height: 15,
+      color: DEFAULT_WAVE[2],
+      progress: 52,
+      speed: 0.8
+    },
+    {
+      height: 15,
+      color: DEFAULT_WAVE[3],
+      progress: 54
     }
   ]
 })

@@ -1,7 +1,3 @@
-export function assert(condition: any, msg: string) {
-  if (!condition) throw new Error(`[vasjs]:${msg}`)
-}
-
 export const animator = (function() {
   return (
     window.requestAnimationFrame.bind(window) ||
@@ -14,3 +10,11 @@ export const animator = (function() {
     }
   )
 })()
+
+export function isString(val: any): val is string {
+  return typeof val === 'string'
+}
+
+export function isCanvas(el: any): el is HTMLCanvasElement {
+  return el instanceof HTMLCanvasElement
+}

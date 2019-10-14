@@ -5,13 +5,8 @@ export function border({
   inner?: string
   outer?: string
 } = {}) {
-  return function({
-    ctx,
-    width: radius
-  }: {
-    ctx: CanvasRenderingContext2D
-    width: number
-  }) {
+  return function(ctx: CanvasRenderingContext2D) {
+    const radius = parseInt(ctx.canvas.style.width!) || ctx.canvas.width
     ctx.globalCompositeOperation = 'destination-atop'
     renderCircle({
       ctx,

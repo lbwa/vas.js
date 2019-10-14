@@ -1,227 +1,223 @@
-import { assert, animator } from '@/utils'
+import { isString, isCanvas, animator } from '@/utils'
+
 export * from './helper'
+
+interface WaveOptions {
+  height: number
+  color: string
+  progress: number
+  offset?: number
+  speed?: number
+  period?: number
+}
+
+interface RenderOptions {
+  el: string | HTMLCanvasElement
+  waves: WaveOptions | WaveOptions[]
+  width?: number
+  height?: number
+  devicePixelRatio?: number
+  period?: number
+  speed?: number
+  lazy?: boolean
+  render?: (context: CanvasRenderingContext2D) => void
+}
+
+interface WaveWithMeta extends WaveOptions {
+  step: number
+  actualSpeed: number
+  startX: number
+  totalLambda: number
+  totalPeriods: number
+  lambda: number
+  offsetY: number
+}
 
 const DEFAULT_WIDTH = 300
 const DEFAULT_HEIGHT = 300
 const DEFAULT_WAVE_COLOR = '#243d71'
-// To control MAX value of step number
-const ENTIRE_WAVES_OFFSET_TIME = 2
+const ENTIRE_WAVES_OFFSET_TIME = 2 // To control MAX value of step number
 const DEFAULT_LAMBDA = 60 // default wavelength
+const DEFAULT_DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1
+const DEFAULT_GLOBAL_SPEED = 0.3
 
-type WaveOption = Readonly<{
-  waveHeight: number
-  color?: string
-  progress?: number
-  offset?: number
-  speed?: number
-  period?: number
-}>
-
-interface WaveMeta {
-  step: number
-  startX: number
-  offsetY: number
-  totalPeriods: number
-  totalLambda: number
-  lambda: number
+function getCanvas(el: string | HTMLCanvasElement) {
+  const canvas = el && (el instanceof Element ? el : document.querySelector(el))
+  if (!isCanvas(canvas))
+    throw new Error(`Option el (input: ${el}) is not a valid Canvas element.`)
+  return canvas
 }
 
-type Wave = WaveOption & WaveMeta
+function getCanvasContext(canvas: HTMLCanvasElement) {
+  const context = canvas.getContext('2d')!
+  if (!context)
+    throw new Error(
+      `Unable to initialize Canvas 2D context. Your browser or machine may not support it.`
+    )
+  return context
+}
 
-interface VasConstructor {
-  el: string | HTMLCanvasElement
-  height?: number
-  width?: number
-  speed?: number
-  waves: WaveOption | WaveOption[]
-  render?: (instance: Vas) => void
-  period?: number
+function resolution(
+  context: CanvasRenderingContext2D,
+  width: number | string,
+  height: number | string,
   devicePixelRatio?: number
+) {
+  const { canvas } = context
+  const dpr = devicePixelRatio || DEFAULT_DEVICE_PIXEL_RATIO
+
+  // set display size (CSS pixel)
+  canvas.style.width = isString(width) ? width : width + 'px'
+  canvas.style.height = isString(height) ? height : height + 'px'
+
+  // set actual size in memory (scaled to account for extra pixel density)
+  canvas.width = +width * dpr
+  canvas.height = +height * dpr
+
+  context.scale(dpr, dpr)
+  return context
 }
 
-export default class Vas {
-  dpr: number
-  el: HTMLCanvasElement
-  height: number
-  width: number
-  ctx: CanvasRenderingContext2D
-  speed: number
-  waves: Wave[]
-  renderer: (...payload: any[]) => void
-  period: number
+function initWave(
+  wave: Readonly<WaveOptions>,
+  period: number,
+  globalSpeed: number,
+  drawingWidth: number,
+  drawingHeight: number
+): WaveWithMeta {
+  const speed = wave.speed === 0 ? wave.speed : wave.speed || globalSpeed
+  const offset = wave.offset || 0
 
-  constructor({
-    el,
+  const totalLambda = drawingWidth * ENTIRE_WAVES_OFFSET_TIME
+  const totalPeriods = period % 2 ? period + 1 : period
+
+  const meta = {
+    step: 0,
+    actualSpeed: speed,
+    startX: speed > 0 ? 0 : speed < 0 ? drawingWidth * -1 : offset,
+    totalLambda: totalLambda,
+    totalPeriods: totalPeriods,
+    lambda: totalLambda / totalPeriods,
+    offsetY: (1 - wave.progress / 100) * drawingHeight - wave.height / 2
+  }
+  return Object.assign(wave, meta)
+}
+
+function loop(render: (this: void) => void) {
+  render()
+  animator(() => loop(render))
+}
+
+function renderWave(
+  context: CanvasRenderingContext2D,
+  wave: ReturnType<typeof initWave>,
+  drawingHeight: number
+) {
+  const {
     height,
-    width,
-    speed = -0.5,
-    waves,
-    render,
-    period,
-    devicePixelRatio = window.devicePixelRatio
-  }: VasConstructor) {
-    const element = el instanceof Element ? el : document.querySelector(el)
-    assert(element, `${el} is not a HTML element.`)
-    assert(
-      this instanceof Vas,
-      'Constructor should be invoked by **new** keyword.'
-    )
+    color = DEFAULT_WAVE_COLOR,
+    startX,
+    totalLambda,
+    totalPeriods,
+    lambda,
+    offsetY
+  } = wave
+  context.fillStyle = color
+  context.beginPath()
 
-    this.dpr = devicePixelRatio || 1
-    this.el = element as HTMLCanvasElement
-    this.ctx = this.el.getContext('2d') as CanvasRenderingContext2D
-
-    assert(
-      this.ctx,
-      'Unable to initialize Canvas. Your browser or machine may not support it.'
-    )
-
-    // Handle canvas resolution
-    this.height = height || DEFAULT_HEIGHT
-    this.width = width || DEFAULT_WIDTH
-    this.correctCanvasResolution()
-
-    this.period = period || Math.round(this.width / DEFAULT_LAMBDA)
-    this.speed = speed
-    this.waves = (Array.isArray(waves) ? waves : [waves]).map(wave =>
-      Object.assign(wave, this.createWaveMeta(wave))
-    )
-
-    this.renderer =
-      typeof render === 'function'
-        ? this.enhanceRenderer.bind(this, render)
-        : this.basicRenderer
-
-    this.renderer()
+  const limit = totalLambda / ENTIRE_WAVES_OFFSET_TIME
+  wave.step += wave.actualSpeed
+  if (
+    (wave.step > 0 && wave.step >= limit) ||
+    (wave.step < 0 && wave.step <= -limit)
+  ) {
+    wave.step = 0
   }
+  context.moveTo(startX - wave.step, offsetY)
 
-  correctCanvasResolution() {
-    const { el: canvas, ctx, width, height } = this
-
-    // set display size (css pixel)
-    canvas.style.width = width + 'px'
-    canvas.style.height = height + 'px'
-
-    // set actual size in memory (scaled to account for extra pixel density)
-    canvas.width = width * this.dpr
-    canvas.height = height * this.dpr
-
-    ctx.scale(this.dpr, this.dpr)
-  }
-
-  clear() {
-    this.ctx.clearRect(0, 0, this.width, this.height)
-  }
-
-  destroy(fn?: (...payload: any[]) => any) {
-    this.renderer = () => fn && fn()
-  }
-
-  createWaveMeta(wave: WaveOption) {
-    const meta = { step: 0 } as WaveMeta
-    const { offset, waveHeight, progress = 0, period = this.period } = wave
-    meta.startX = this.getStartX(wave, offset || 0)
-
-    meta.totalLambda = this.width * ENTIRE_WAVES_OFFSET_TIME
-
-    /**
-     * @description Similar to wave spatial frequency, but this describe how
-     *  many period exist in entire life-cycle, not unit of space
-     * @wiki https://en.wikipedia.org/wiki/Spatial_frequency
-     */
-    meta.totalPeriods = period % 2 ? period + 1 : period
-
-    /**
-     * @description The distance over which the wave's shape repeats
-     * @wiki https://en.wikipedia.org/wiki/Wavelength
-     */
-    meta.lambda = meta.totalLambda / meta.totalPeriods
-
-    // current wave stage, based on the middle of wave body
-    meta.offsetY = this.height - waveHeight / 2 - (progress / 100) * this.height
-
-    return meta
-  }
-
-  private basicRenderer = () => {
-    this.clear()
-    for (const wave of this.waves) {
-      this.renderWaves(wave)
-    }
-    animator(this.renderer)
-  }
-
-  private enhanceRenderer(render: VasConstructor['render']) {
-    this.clear()
-    for (const wave of this.waves) {
-      this.renderWaves(wave)
-    }
-    this.ctx.save()
-    render && render(this)
-    this.ctx.restore()
-    animator(this.renderer)
-  }
-
-  renderWaves(wave: Wave) {
-    const {
-      waveHeight,
-      color = DEFAULT_WAVE_COLOR,
-      startX,
-      totalLambda,
-      totalPeriods,
-      lambda,
+  for (let i = 0; i < totalPeriods; i++) {
+    const dx = lambda * i
+    const offsetX = dx + startX - wave.step
+    context.quadraticCurveTo(
+      offsetX + lambda / 4,
+      offsetY + height,
+      offsetX + lambda / 2,
       offsetY
-    } = wave
-    const { ctx, height } = this
-
-    ctx.fillStyle = color
-    ctx.beginPath()
-    this.stepper(wave, totalLambda / ENTIRE_WAVES_OFFSET_TIME)
-    ctx.moveTo(startX - wave.step, offsetY)
-
-    for (let i = 0; i < totalPeriods; i++) {
-      const dx = lambda * i
-      const offsetX = dx + startX - wave.step
-      ctx.quadraticCurveTo(
-        offsetX + lambda / 4,
-        offsetY + waveHeight,
-        offsetX + lambda / 2,
-        offsetY
-      )
-      ctx.quadraticCurveTo(
-        offsetX + (lambda / 4 + lambda / 2),
-        offsetY - waveHeight,
-        offsetX + lambda,
-        offsetY
-      )
-    }
-
-    ctx.lineTo(startX + totalLambda, height)
-    ctx.lineTo(startX, height)
-    ctx.fill()
-    ctx.closePath()
-  }
-
-  stepper(wave: Wave, limit = 0) {
-    wave.step +=
-      wave.speed === 0 ? wave.speed : wave.speed || this.speed || -0.1
-    if (
-      (wave.step > 0 && wave.step >= limit) ||
-      (wave.step < 0 && wave.step <= -limit)
     )
-      wave.step = 0
+    context.quadraticCurveTo(
+      offsetX + (lambda / 4 + lambda / 2),
+      offsetY - height,
+      offsetX + lambda,
+      offsetY
+    )
   }
 
-  /**
-   * @description Used to control x value of wave start point
-   * @private
-   */
-  private getStartX(wave: WaveOption, optionOffset: number) {
-    const speed = wave.speed === 0 ? wave.speed : wave.speed || this.speed
-    if (speed > 0) return 0
-    if (speed < 0) return this.width * -1
+  context.lineTo(startX + totalLambda, drawingHeight)
+  context.lineTo(startX, drawingHeight)
+  context.fill()
+  context.closePath()
+}
 
-    // Wave offset only works with static wave
-    return optionOffset
+function createRender(
+  context: CanvasRenderingContext2D,
+  waves: ReturnType<typeof initWave>[],
+  render?: RenderOptions['render']
+) {
+  const drawingWidth = context.canvas.width
+  const drawingHeight = context.canvas.height
+  const clear = () => context.clearRect(0, 0, drawingWidth, drawingHeight)
+
+  if (render) {
+    return function enhance() {
+      clear()
+      let len = waves.length
+      while (len--) {
+        renderWave(context, waves[len], drawingHeight)
+      }
+      context.save()
+      render(context)
+      context.restore()
+    }
   }
+  return function basic() {
+    clear()
+    let len = waves.length
+    while (len--) {
+      renderWave(context, waves[len], drawingHeight)
+    }
+  }
+}
+
+export default function createCanvasDraw({
+  el,
+  waves,
+  width = DEFAULT_WIDTH,
+  height = DEFAULT_HEIGHT,
+  devicePixelRatio = DEFAULT_DEVICE_PIXEL_RATIO,
+  period = Math.round(width / DEFAULT_LAMBDA),
+  speed = DEFAULT_GLOBAL_SPEED,
+  lazy,
+  render
+}: Readonly<RenderOptions>) {
+  const canvas = getCanvas(el)
+
+  const context = resolution(
+    getCanvasContext(canvas),
+    width,
+    height,
+    devicePixelRatio
+  )
+
+  const wavesWithMeta = (Array.isArray(waves) ? waves : [waves]).map(wave =>
+    initWave(wave, period, speed, width, height)
+  )
+
+  let renderer = createRender(context, wavesWithMeta, render)
+  const start = () => {
+    loop(renderer)
+    return {
+      destroy: () => (renderer = () => {})
+    }
+  }
+  return lazy ? start : start()
 }
