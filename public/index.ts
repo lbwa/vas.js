@@ -13,7 +13,7 @@ createApp({
   width: RADIUS_NORMAL,
   height: RADIUS_NORMAL,
   speed: -0.2,
-  render: border(),
+  plugin: border(),
   waves: [
     {
       height: 30,
@@ -42,7 +42,7 @@ createApp({
   el: '#with-custom-render',
   width: 200,
   height: 200,
-  render: border({
+  plugin: border({
     inner: 'rgba(156, 220, 253, 1)',
     outer: '#ebf9ff'
   }),
