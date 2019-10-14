@@ -1,6 +1,6 @@
 import { isString, isCanvas, animator, noop } from '@/utils'
 
-export * from './helper'
+export * from './plugins'
 
 interface WaveOptions {
   height: number
@@ -8,7 +8,6 @@ interface WaveOptions {
   progress: number
   offset?: number
   speed?: number
-  period?: number
 }
 
 interface RenderOptions {
@@ -20,7 +19,7 @@ interface RenderOptions {
   period?: number
   speed?: number
   lazy?: boolean
-  render?: (context: CanvasRenderingContext2D) => void
+  plugin?: (context: CanvasRenderingContext2D) => void
 }
 
 interface WaveWithMeta extends WaveOptions {
@@ -158,16 +157,16 @@ function renderWave(
   context.closePath()
 }
 
-function createRender(
+function createFramer(
   context: CanvasRenderingContext2D,
   waves: ReturnType<typeof initWave>[],
-  render?: RenderOptions['render']
+  plugin?: RenderOptions['plugin']
 ) {
   const drawingWidth = context.canvas.width
   const drawingHeight = context.canvas.height
   const clear = () => context.clearRect(0, 0, drawingWidth, drawingHeight)
 
-  if (render) {
+  if (plugin) {
     return function enhance() {
       clear()
       let len = waves.length
@@ -175,7 +174,7 @@ function createRender(
         renderWave(context, waves[len], drawingHeight)
       }
       context.save()
-      render(context)
+      plugin(context)
       context.restore()
     }
   }
@@ -188,7 +187,7 @@ function createRender(
   }
 }
 
-export default function createCanvasDraw(
+export default function createRender(
   {
     el,
     waves,
@@ -198,7 +197,7 @@ export default function createCanvasDraw(
     period = Math.round(width / DEFAULT_LAMBDA),
     speed = DEFAULT_GLOBAL_SPEED,
     lazy,
-    render
+    plugin
   }: Readonly<RenderOptions> = {} as RenderOptions
 ): (() => Controllers) | Controllers {
   const canvas = getCanvas(el)
@@ -214,19 +213,19 @@ export default function createCanvasDraw(
     initWave(wave, period, speed, width, height)
   )
 
-  let renderer = createRender(context, wavesWithMeta, render)
-  const run = (render: (this: void) => void) => {
-    render()
-    animator(() => loop(render))
+  let framer = createFramer(context, wavesWithMeta, plugin)
+  const run = (framer: (this: void) => void) => {
+    framer()
+    animator(() => loop(framer))
   }
   let loop = run
   const start = () => {
-    loop(renderer)
+    loop(framer)
     return {
       on: () => {
         if (loop === noop) {
           loop = run
-          loop(renderer)
+          loop(framer)
         }
       },
       off: () => {
