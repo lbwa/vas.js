@@ -33,6 +33,11 @@ interface WaveWithMeta extends WaveOptions {
   offsetY: number
 }
 
+interface Controllers {
+  on: () => void
+  off: () => void
+}
+
 const DEFAULT_WIDTH = 300
 const DEFAULT_HEIGHT = 300
 const DEFAULT_WAVE_COLOR = '#243d71'
@@ -183,17 +188,19 @@ function createRender(
   }
 }
 
-export default function createCanvasDraw({
-  el,
-  waves,
-  width = DEFAULT_WIDTH,
-  height = DEFAULT_HEIGHT,
-  devicePixelRatio = DEFAULT_DEVICE_PIXEL_RATIO,
-  period = Math.round(width / DEFAULT_LAMBDA),
-  speed = DEFAULT_GLOBAL_SPEED,
-  lazy,
-  render
-}: Readonly<RenderOptions>) {
+export default function createCanvasDraw(
+  {
+    el,
+    waves,
+    width = DEFAULT_WIDTH,
+    height = DEFAULT_HEIGHT,
+    devicePixelRatio = DEFAULT_DEVICE_PIXEL_RATIO,
+    period = Math.round(width / DEFAULT_LAMBDA),
+    speed = DEFAULT_GLOBAL_SPEED,
+    lazy,
+    render
+  }: Readonly<RenderOptions> = {} as RenderOptions
+): (() => Controllers) | Controllers {
   const canvas = getCanvas(el)
 
   const context = resolution(
