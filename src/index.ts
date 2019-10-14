@@ -1,4 +1,4 @@
-import { isString, isCanvas, animator } from '@/utils'
+import { isString, isCanvas, animator, noop } from '@/utils'
 
 export * from './helper'
 
@@ -101,11 +101,6 @@ function initWave(
     offsetY: (1 - wave.progress / 100) * drawingHeight - wave.height / 2
   }
   return Object.assign(wave, meta)
-}
-
-function loop(render: (this: void) => void) {
-  render()
-  animator(() => loop(render))
 }
 
 function renderWave(
@@ -213,10 +208,23 @@ export default function createCanvasDraw({
   )
 
   let renderer = createRender(context, wavesWithMeta, render)
+  const run = (render: (this: void) => void) => {
+    render()
+    animator(() => loop(render))
+  }
+  let loop = run
   const start = () => {
     loop(renderer)
     return {
-      destroy: () => (renderer = () => {})
+      on: () => {
+        if (loop === noop) {
+          loop = run
+          loop(renderer)
+        }
+      },
+      off: () => {
+        loop = noop
+      }
     }
   }
   return lazy ? start : start()
