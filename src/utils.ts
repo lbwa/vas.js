@@ -18,3 +18,5 @@ export function isString(val: any): val is string {
 export function isCanvas(el: any): el is HTMLCanvasElement {
   return el instanceof HTMLCanvasElement
 }
+
+export function noop() {}
