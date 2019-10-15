@@ -70,8 +70,8 @@ Those options are used to control every single wave-like fluid.
 ```ts
 interface WaveOptions {
   height: number
-  color: string
-  progress: number
+  color?: string
+  progress?: number
   offset?: number
   speed?: number
 }
