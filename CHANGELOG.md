@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0](https://github.com/lbwa/vas.js/compare/v2.2.0...v3.0.0) (2019-10-15)
+
+
+### Features
+
+* **core:** suport on/off functionalities ([cc66ffb](https://github.com/lbwa/vas.js/commit/cc66ffb10d7b753579fa7d4ad170066e96fef5e1))
+* set the default value of color and progress ([4d7ece3](https://github.com/lbwa/vas.js/commit/4d7ece38a24a5b8bfa52f044176ac8127075a96c))
+
 ## [2.2.0](https://github.com/lbwa/vas.js/compare/v2.1.0...v2.2.0) (2019-09-21)
 
 
