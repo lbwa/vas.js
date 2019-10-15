@@ -4,8 +4,8 @@ export * from './plugins'
 
 interface WaveOptions {
   height: number
-  color: string
-  progress: number
+  color?: string
+  progress?: number
   offset?: number
   speed?: number
 }
@@ -102,7 +102,7 @@ function initWave(
     totalLambda: totalLambda,
     totalPeriods: totalPeriods,
     lambda: totalLambda / totalPeriods,
-    offsetY: (1 - wave.progress / 100) * drawingHeight - wave.height / 2
+    offsetY: (1 - (wave.progress || 0) / 100) * drawingHeight - wave.height / 2
   }
   return Object.assign(wave, meta)
 }
