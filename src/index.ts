@@ -18,7 +18,6 @@ interface RenderOptions {
   devicePixelRatio?: number
   period?: number
   speed?: number
-  lazy?: boolean
   plugin?: (context: CanvasRenderingContext2D) => void
 }
 
@@ -34,7 +33,7 @@ interface WaveWithMeta extends WaveOptions {
 
 interface Controllers {
   on: () => void
-  off: () => void
+  off: (clear: boolean) => void
 }
 
 const DEFAULT_WIDTH = 300
@@ -196,10 +195,9 @@ export default function createRender(
     devicePixelRatio = DEFAULT_DEVICE_PIXEL_RATIO,
     period = Math.round(width / DEFAULT_LAMBDA),
     speed = DEFAULT_GLOBAL_SPEED,
-    lazy,
     plugin
   }: Readonly<RenderOptions> = {} as RenderOptions
-): (() => Controllers) | Controllers {
+): Controllers {
   const canvas = getCanvas(el)
 
   const context = resolution(
@@ -209,7 +207,7 @@ export default function createRender(
     devicePixelRatio
   )
 
-  const wavesWithMeta = (Array.isArray(waves) ? waves : [waves]).map(wave =>
+  const wavesWithMeta = (Array.isArray(waves) ? waves : [waves]).map((wave) =>
     initWave(wave, period, speed, width, height)
   )
 
@@ -228,10 +226,14 @@ export default function createRender(
           loop(framer)
         }
       },
-      off: () => {
+      off: (clear: boolean) => {
         loop = noop
+
+        if (clear) {
+          context.clearRect(0, 0, canvas.width, canvas.height)
+        }
       }
     }
   }
-  return lazy ? start : start()
+  return start()
 }

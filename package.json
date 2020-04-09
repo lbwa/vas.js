@@ -2,7 +2,7 @@
   "name": "vasjs",
   "version": "3.0.0",
   "description": "A independent component for simplifying wave-like chart building.",
-  "main": "dist/vas.min.js",
+  "main": "dist/vas.umd.js",
   "umd": "dist/vas.umd.js",
   "module": "dist/vas.esm.js",
   "types": "dist/index.d.ts",
