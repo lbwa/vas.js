@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [4.0.1](https://github.com/lbwa/vas.js/compare/v4.0.0...v4.0.1) (2020-04-09)
+
+
+### Bug Fixes
+
+* correct Controllers['off'] type ([ffb64e1](https://github.com/lbwa/vas.js/commit/ffb64e1d99d8c538cd7bb67462009aad86d9add1))
+
 ## [4.0.0](https://github.com/lbwa/vas.js/compare/v3.0.0...v4.0.0) (2020-04-09)
 
 
