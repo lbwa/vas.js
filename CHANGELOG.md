@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0](https://github.com/lbwa/vas.js/compare/v3.0.0...v4.0.0) (2020-04-09)
+
+
+### Features
+
+* deprecated "lazy" option and support clear canvas ([3a40c54](https://github.com/lbwa/vas.js/commit/3a40c54cf6e9cc1efea54ea1bf36b905d1eae712))
+
 ## [3.0.0](https://github.com/lbwa/vas.js/compare/v2.2.0...v3.0.0) (2019-10-15)
 
 
