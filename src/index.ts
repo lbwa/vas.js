@@ -33,7 +33,7 @@ interface WaveWithMeta extends WaveOptions {
 
 interface Controllers {
   on: () => void
-  off: (clear: boolean) => void
+  off: (clear?: boolean) => void
 }
 
 const DEFAULT_WIDTH = 300
@@ -217,7 +217,7 @@ export default function createRender(
     animator(() => loop(framer))
   }
   let loop = run
-  const start = () => {
+  const start: () => Controllers = () => {
     loop(framer)
     return {
       on: () => {
@@ -226,7 +226,7 @@ export default function createRender(
           loop(framer)
         }
       },
-      off: (clear: boolean) => {
+      off: (clear) => {
         loop = noop
 
         if (clear) {

@@ -9,9 +9,6 @@
 </p>
 
 <p align="center">
-  <a href="https://lbwa.github.io/vas.js">
-    <img src="https://img.shields.io/bundlephobia/minzip/vasjs.svg?style=flat-square" alt="npm bundle size"/>
-  </a>
   <a href="https://www.npmjs.com/package/vasjs">
     <img src="https://img.shields.io/npm/dt/vasjs.svg?style=flat-square" alt="npm"/>
   </a>
