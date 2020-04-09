@@ -100,7 +100,6 @@ interface RenderOptions {
   devicePixelRatio?: number
   period?: number
   speed?: number
-  lazy?: boolean
   plugin?: (context: CanvasRenderingContext2D) => void
 }
 ```
@@ -114,7 +113,6 @@ interface RenderOptions {
 | devicePixelRatio |    /     |           `window.devicePixelRatio` or if it does not exist, the value of option is 1.            | [Hight resolution adaptation](#Hight-resolution-adaptation)                                                                                     |
 |      period      |    /     | The value of a number rounded to the nearest quotient between global width and default lambda 60. | The period of waves                                                                                                                             |
 |      speed       |    /     |                                               `0.3`                                               | The flowing direction is from right to left when you set a positive value, otherwise, from left to right. All waves are static with zero speed. |
-|       lazy       |    /     |                                                N/A                                                | Delay the first rendering or not                                                                                                                |
 |      plugin      |    /     |                                                N/A                                                | The current [CanvasRenderingContext2D] will be passed into this function.                                                                       |
 
 [canvasrenderingcontext2d]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
@@ -244,10 +242,13 @@ render.on()
 
 ### Deactivate render process
 
-- `off`: `() => void`
+- `off`: `(clear: boolean) => void`
 
 ```ts
 render.off()
+
+// pause animation and clear canvas area
+render.off(true)
 ```
 
 ## Hight resolution adaptation
