@@ -1,0 +1,9 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"><title>vas.js</title><style>body,html{margin:0}body{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;min-height:100vh}canvas+canvas{margin-left:20px}</style></head><body><script>const create = document.createElement.bind(document)
+      const fragment = document.createDocumentFragment()
+      ;['with-border-helper', 'with-custom-render'].forEach(id => {
+        const ele = create('canvas')
+        ele.id = id
+        ele.innerText = `Your browser doesn't support canvas element.`
+        fragment.append(ele)
+      })
+      document.body.insertBefore(fragment, document.body.firstElementChild)</script><script type="text/javascript" src="./runtime.4a2a61ed.js"></script><script type="text/javascript" src="./sample.fa02ae19.js"></script></body></html>
